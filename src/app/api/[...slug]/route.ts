@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 const url =
   process.env.NODE_ENV === "production"
     ? "https://api.fundit.com.ng"
-    : "http://localhost:3800";
+    : "https://api.fundit.com.ng";
 export async function GET(
   request: Request,
   { params }: { params: { slug: string } }

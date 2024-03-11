@@ -92,7 +92,7 @@ const DashboardWrapper = ({ loans }: Props) => {
           </tbody>
         </table>
       </div>
-      <div className="flex items-center justify-center mt-10 space-x-10">
+      <div className="flex max-md:flex-col max-md:justify-center gap-4 items-center justify-center mt-10 md:space-x-10">
         <ReactPaginate
           pageCount={pageCount}
           breakLabel="..."
