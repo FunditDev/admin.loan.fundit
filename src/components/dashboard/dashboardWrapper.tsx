@@ -3,8 +3,8 @@ import { LoansType } from "@/utils/types";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import Filter from "./Filter";
-import { time } from "console";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 type Props = {
   loans: LoansType[];
 };
@@ -52,19 +52,27 @@ const DashboardWrapper = ({ loans }: Props) => {
       <h1 className="text-center mb-5">
         <span className="text-2xl font-bold">Staff Loans</span>
       </h1>
-      <Filter setSearch={setSearch} search={search} />
+      <div className="flex justify-between items-center gap-10 mb-10">
+        <Filter setSearch={setSearch} search={search} />
+        <button
+          onClick={() => exportToExcel(loans)}
+          className="bg-green-500 text-white px-3 py-2 rounded-md flex-shrink-1"
+        >
+          Export to Excel
+        </button>
+      </div>
       <div className="overflow-x-auto min-h-[400px]">
         <table className="border border-collapse w-full whitespace-nowrap">
           <thead>
             <tr className="*:px-2 *:py-2 *:border ">
               <th>Staff Id</th>
+              <th>Loan Request Date</th>
               <th>Amount Taken</th>
               <th>Total Repayment</th>
               <th>
                 Tenor <span className="text-sm">(Month)</span>
               </th>
               <th>Status</th>
-              <th>Date</th>
             </tr>
           </thead>
           <tbody className="h-fit">
@@ -74,11 +82,11 @@ const DashboardWrapper = ({ loans }: Props) => {
                 className="*:px-2 *:py-2 *:border *:text-center *:text-sm"
               >
                 <td>{loan.staffId}</td>
+                <td>{timeFormatter(loan.createdDate as unknown as Date)}</td>
                 <td> &#8358;{loan.amount}</td>
                 <td> &#8358;{loan.totalRepayment}</td>
                 <td>{loan.loanTenure.length}</td>
                 <td>Running</td>
-                <td>{timeFormatter(loan.createdDate as unknown as Date)}</td>
               </tr>
             ))}
           </tbody>
@@ -121,4 +129,33 @@ const timeFormatter = (date: Date) => {
   });
 
   return formattedDate;
+};
+
+const exportToExcel = (loans: LoansType[]) => {
+  const formattedLoans = loans.map((loan) => {
+    return {
+      StaffId: loan.staffId,
+      LoanRequestDate: timeFormatter(loan.createdDate as unknown as Date),
+      StaffEmail: loan.staffEmail,
+      StaffName: loan.staffName,
+      AmountTaken: loan.amount,
+      TotalRepayment: loan.totalRepayment,
+      Tenor:
+        loan.loanTenure.length > 1
+          ? `${loan.loanTenure.length} months`
+          : `${loan.loanTenure.length} month`,
+      Status: "Running",
+      LoanStatus: loan.loanStatus,
+    };
+  });
+  const ws = XLSX.utils.json_to_sheet(formattedLoans);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  XLSX.writeFile(wb, "loans.xlsx");
+
+  // const excelBuffer: any = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  // const data = new Blob([excelBuffer], {
+  //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  // });
+  // saveAs(data, "loans.xlsx");
 };

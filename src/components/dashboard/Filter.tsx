@@ -6,7 +6,7 @@ type props = {
 };
 const Filter = ({ setSearch, search }: props) => {
   return (
-    <div className="mb-10">
+    <div className="flex-1">
       <input
         type="text"
         placeholder="Search by staff id or amount taken or date taken" 
