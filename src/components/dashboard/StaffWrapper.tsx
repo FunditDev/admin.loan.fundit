@@ -1,51 +1,52 @@
 "use client";
-import { LoansType } from "@/utils/types";
+import { LoansType, Stafftype } from "@/utils/types";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import Filter from "./Filter";
 import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+import Link from "next/link";
 type Props = {
-  loans: LoansType[];
+  staffs: Stafftype[];
 };
 
-const DashboardWrapper = ({ loans }: Props) => {
+const StaffWrapper = ({ staffs }: Props) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [offset, setOffset] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
-  console.log(loans, "loans -->");
+  console.log(staffs, "staffs -->");
   useEffect(() => {
-    if (loans && loans.length > 0) {
+    if (staffs && staffs.length > 0) {
       setIsLoading(false);
     }
-  }, [loans]);
+  }, [staffs]);
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  if ((!isLoading && !loans) || loans.length === 0) {
-    return <div>No loans available</div>;
+  if ((!isLoading && !staffs) || staffs.length === 0) {
+    return <div>No staffs available</div>;
   }
 
   const itemsPerPage = 12;
-  const pageCount = Math.ceil(loans.length / itemsPerPage);
+  const pageCount = Math.ceil(staffs.length / itemsPerPage);
   const endOffset = offset + itemsPerPage;
-  const currentLoans = loans.slice(offset, endOffset);
+  const currentstaffs = staffs.slice(offset, endOffset);
   const handlePageClick = (data: any) => {
     let selected = data.selected;
-    let offset = (selected * itemsPerPage) % loans.length;
+    let offset = (selected * itemsPerPage) % staffs.length;
     setOffset(offset);
   };
 
-  const filteredLoans = currentLoans.filter((loan) => {
+  const filteredStaffs = currentstaffs.filter((staff) => {
     return (
-      loan.staffId.toLowerCase().includes(search.toLowerCase()) ||
-      loan.amount.toString().toLowerCase().includes(search.toLowerCase()) ||
-      timeFormatter(loan.createdDate as unknown as Date)
+      staff.staffId.toLowerCase().includes(search.toLowerCase()) ||
+      staff.staffEmail
         .toString()
         .toLowerCase()
-        .includes(search.toLowerCase())
+        .includes(search.toLowerCase()) ||
+      staff.staffName.toString().toLowerCase().includes(search.toLowerCase())
     );
   });
+  const placeholder = "Search by staff Id or staff Email or staff Name";
 
   return (
     <div className=" w-full mt-10 px-2 sm:px-10 md:mt-20">
@@ -53,9 +54,13 @@ const DashboardWrapper = ({ loans }: Props) => {
         <span className="text-2xl font-bold">Staff Loans</span>
       </h1>
       <div className="flex justify-between items-center gap-10 mb-10">
-        <Filter setSearch={setSearch} search={search} />
+        <Filter
+          setSearch={setSearch}
+          search={search}
+          placeholder={placeholder}
+        />
         <button
-          onClick={() => exportToExcel(loans)}
+          onClick={() => exportToExcel(staffs)}
           className="bg-green-500 text-white px-3 py-2 rounded-md flex-shrink-1"
         >
           Export to Excel
@@ -65,28 +70,32 @@ const DashboardWrapper = ({ loans }: Props) => {
         <table className="border border-collapse w-full whitespace-nowrap">
           <thead>
             <tr className="*:px-2 *:py-2 *:border ">
+              <td>No</td>
               <th>Staff Id</th>
-              <th>Loan Request Date</th>
-              <th>Amount Taken</th>
-              <th>Total Repayment</th>
-              <th>
-                Tenor <span className="text-sm">(Month)</span>
-              </th>
-              <th>Status</th>
+              <th>Staff Email</th>
+              <th>Staff Name</th>
+              <th>Monthly Salary</th>
             </tr>
           </thead>
           <tbody className="h-fit">
-            {filteredLoans.map((loan) => (
+            {filteredStaffs.map((staff, index) => (
               <tr
-                key={loan.loanId}
+                key={staff.staffId}
                 className="*:px-2 *:py-2 *:border *:text-center *:text-sm"
               >
-                <td>{loan.staffId}</td>
-                <td>{timeFormatter(loan.createdDate as unknown as Date)}</td>
-                <td> &#8358;{loan.amount}</td>
-                <td> &#8358;{loan.totalRepayment}</td>
-                <td>{loan.loanTenure.length}</td>
-                <td>Running</td>
+                <td>{index + 1}</td>
+                <td>{staff.staffId}</td>
+                <td> {staff.staffEmail}</td>
+                <td>{staff.staffName}</td>
+                <td> &#8358;{staff.monthlySalary.toLocaleString("en-us")}</td>
+                <td>
+                  <Link
+                    href={`/dashboard/staffs/${staff.staffId}`}
+                    className="text-blue-500 font-bold gap-1 flex items-center justify-center"
+                  >
+                    View
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -108,14 +117,14 @@ const DashboardWrapper = ({ loans }: Props) => {
           pageClassName="text-sm font-medium text-gray-900 bg-gray-200 px-3 py-2 rounded-md"
         />
         <p>
-          Showing {offset + 1} - {endOffset} of {filteredLoans.length} loans
+          Showing {offset + 1} - {endOffset} of {filteredStaffs.length} loans
         </p>
       </div>
     </div>
   );
 };
 
-export default DashboardWrapper;
+export default StaffWrapper;
 
 const timeFormatter = (date: Date) => {
   const loanCreatedDate = new Date(date);
@@ -131,31 +140,17 @@ const timeFormatter = (date: Date) => {
   return formattedDate;
 };
 
-const exportToExcel = (loans: LoansType[]) => {
-  const formattedLoans = loans.map((loan) => {
+const exportToExcel = (staffs: Stafftype[]) => {
+  const formattedStaffs = staffs.map((staff) => {
     return {
-      StaffId: loan.staffId,
-      LoanRequestDate: timeFormatter(loan.createdDate as unknown as Date),
-      StaffEmail: loan.staffEmail,
-      StaffName: loan.staffName,
-      AmountTaken: loan.amount,
-      TotalRepayment: loan.totalRepayment,
-      Tenor:
-        loan.loanTenure.length > 1
-          ? `${loan.loanTenure.length} months`
-          : `${loan.loanTenure.length} month`,
-      Status: "Running",
-      LoanStatus: loan.loanStatus,
+      StaffId: staff.staffId,
+      StaffEmail: staff.staffEmail,
+      StaffName: staff.staffName,
+      monthlySalary: staff.monthlySalary,
     };
   });
-  const ws = XLSX.utils.json_to_sheet(formattedLoans);
+  const ws = XLSX.utils.json_to_sheet(formattedStaffs);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-  XLSX.writeFile(wb, "loans.xlsx");
-
-  // const excelBuffer: any = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  // const data = new Blob([excelBuffer], {
-  //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  // });
-  // saveAs(data, "loans.xlsx");
+  XLSX.writeFile(wb, "staffs.xlsx");
 };

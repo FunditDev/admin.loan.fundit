@@ -9,8 +9,8 @@ let httpNoAuth;
 let refreshToking = false;
 const baseURL =
   process.env.NODE_ENV === "production"
-    ? "https://api.fundit.com.ng"
-    : "http://localhost:3000/api";
+    ? "https://www.smartcash.fundit.com.ng"
+    : "http://localhost:3001/api";
 
 if (typeof window !== undefined) {
   httpNoAuth = axios.create({

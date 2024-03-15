@@ -33,3 +33,10 @@ export type LoanType = {
   scorePercent: number;
   totalRepayment: string;
 };
+
+export type Stafftype ={
+  staffId: string;
+  staffName: string;
+  staffEmail: string;
+  monthlySalary: number;
+}

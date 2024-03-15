@@ -4,7 +4,6 @@ import { UseFormRegister, UseFormTrigger } from "react-hook-form";
 type CustomInputProps = {
   label: string;
   type: string;
-  rest?: any;
   name: string;
   register: UseFormRegister<any>;
   errors?: string;
@@ -16,6 +15,8 @@ type CustomInputProps = {
   className?: string;
   labelClassName?: string;
   errorClassName?: string;
+  rest?: any;
+  disabled?: boolean;
 };
 
 const classNames = (...classes: string[]) => {
@@ -35,6 +36,7 @@ export default function CustomInput({
   clearErrors,
   className,
   errorClassName,
+  disabled,
   ...rest
 }: CustomInputProps) {
   return (
@@ -57,6 +59,7 @@ export default function CustomInput({
                 : " "
             }`
           )}
+          disabled={disabled}
           onBlur={() => trigger && trigger(name)}
           onClick={() => clearErrors && clearErrors(name)}
           placeholder={placeholder}
