@@ -36,7 +36,7 @@ export async function GET(
       status: data.status || data.statusCode,
     });
   } catch (e) {
-    console.log(e);
+    console.log("error -->",e);
     return NextResponse.json(e);
   }
 }
