@@ -108,7 +108,7 @@ const LoanWrapper = ({ loans }: Props) => {
           pageClassName="text-sm font-medium text-gray-900 bg-gray-200 px-3 py-2 rounded-md"
         />
         <p>
-          Showing {offset + 1} - {endOffset} of {filteredLoans.length} loans
+          Showing {offset + 1} - {endOffset} of {loans.length} loans
         </p>
       </div>
     </div>
