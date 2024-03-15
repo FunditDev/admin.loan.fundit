@@ -6,14 +6,12 @@ import { LoansType, Stafftype } from "@/utils/types";
 import React from "react";
 
 const getStaffs = async (): Promise<Stafftype[]> => {
-  const loans = await processNoAuth("get", Endpoints.getAllStaff);
-  console.log(loans, "loans -->");
-  return loans?.data;
+  const staffs = await processNoAuth("get", Endpoints.getAllStaff);
+  console.log(staffs, "staffs -->");
+  return staffs?.data;
 };
 const StaffsPage = async () => {
   const staffs = await getStaffs();
-
-  console.log('staffs -->', staffs);
   return (
     <div className="flex  w-full items-center justify-center">
       <StaffWrapper staffs={staffs} />
