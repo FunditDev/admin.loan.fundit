@@ -24,7 +24,6 @@ const Page = ({
     slug: string;
   };
 }) => {
-  console.log(params, "params");
   const fetchStaff = async () => {
     setIsFetching(true);
     try {
@@ -98,6 +97,7 @@ const Page = ({
             ...data,
             monthlySalary: parseFloat(data.monthlySalary.replace(/,/g, "")),
             staffId: staffDetails.staffId,
+            updateType: "UPDATE",
           }
         );
         console.log(res);
@@ -124,10 +124,12 @@ const Page = ({
     if (confirmSubmit) {
       try {
         const res = await processNoAuth(
-          "delete",
+          "post",
           `${Endpoints.updateStaff}?adminId=1234566`,
           {
-            staffId: staffDetails.staffId,
+            ...staffDetails,
+            monthlySalary: parseFloat(staffDetails.monthlySalary.replace(/,/g, "")),
+            updateType: "DELETE",
           }
         );
         console.log(res);
