@@ -118,6 +118,7 @@ const Page = ({
     }
   };
   const handleDelete = async () => {
+    return;
     const confirmSubmit = confirm(
       "Are you sure you want to delete this staff?"
     );
@@ -204,6 +205,7 @@ const Page = ({
             handleClick={handleDelete}
             className=" !to-red-500 !from-red-500"
             type="button"
+            disabled
           >
             Delete Staff
           </CustomButton>
