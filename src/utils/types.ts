@@ -36,7 +36,8 @@ export type LoanType = {
 
 export type Stafftype ={
   staffId: string;
-  staffName: string;
+  firstName: string;
+  lastName: string;
   staffEmail: string;
   monthlySalary: number;
 }

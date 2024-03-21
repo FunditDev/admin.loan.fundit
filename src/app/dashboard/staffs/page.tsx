@@ -1,20 +1,32 @@
+"use client";
 import StaffWrapper from "@/components/dashboard/StaffWrapper";
 import DashboardWrapper from "@/components/dashboard/LoanWrapper";
 import { Endpoints } from "@/utils/endpoint";
 import { processNoAuth } from "@/utils/http";
 import { LoansType, Stafftype } from "@/utils/types";
 import React from "react";
+import { useStaff } from "@/hooks/usePendingUpdate";
+import Spinner from "@/components/icons/Spinner";
 
-const getStaffs = async (): Promise<Stafftype[]> => {
-  const staffs = await processNoAuth("get", Endpoints.getAllStaff);
-  console.log(staffs, "staffs -->");
-  return staffs?.data;
-};
-const StaffsPage = async () => {
-  const staffs = await getStaffs();
+const StaffsPage = () => {
+  const { data, isLoading, error } = useStaff();
   return (
     <div className="flex  w-full items-center justify-center">
-      <StaffWrapper staffs={staffs} />
+      <div className="flex  w-full items-center justify-center">
+        {isLoading && (
+          <div className=" py-36">
+            <Spinner className="mx-auto text-20 w-16 h-16 animate-spin" />
+          </div>
+        )}
+        {!isLoading && !data?.length && (
+          <div className="flex justify-center items-center py-36">
+            <p>No Staff found</p>
+          </div>
+        )}
+        {!isLoading && data && data.length > 0 && (
+          <StaffWrapper staffs={data} />
+        )}
+      </div>
     </div>
   );
 };

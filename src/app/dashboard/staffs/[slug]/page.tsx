@@ -11,7 +11,8 @@ import { set, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 type StaffType = {
-  staffName: string;
+  firstName: string;
+  lastName: string;
   staffEmail: string;
   monthlySalary: string;
   staffId: string;
@@ -45,7 +46,8 @@ const Page = ({
     }
   };
   const [staffDetails, setStaffDetails] = useState<StaffType>({
-    staffName: "",
+    firstName: "",
+    lastName: "",
     staffEmail: "",
     monthlySalary: "0",
     staffId: "",
@@ -68,7 +70,8 @@ const Page = ({
 
   useEffect(() => {
     reset({
-      staffName: staffDetails.staffName,
+      lastName: staffDetails.lastName,
+      firstName: staffDetails.firstName,
       staffEmail: staffDetails.staffEmail,
       monthlySalary: staffDetails.monthlySalary,
     });
@@ -83,10 +86,8 @@ const Page = ({
         alert("You cannot update the staff email");
         return;
       }
-      if (
-        staffDetails.staffName.split(" ")[1] !== data.staffName.split(" ")[1]
-      ) {
-        alert("You cannot update the staff Last Name");
+      if (staffDetails.firstName !== data.firstName) {
+        alert("You cannot update the staff First Name");
         return;
       }
       try {
@@ -101,6 +102,15 @@ const Page = ({
           }
         );
         console.log(res);
+        toast.success("Update has been sent for Approval", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       } catch (e: any) {
         console.log("error -->", e);
         toast.error(e?.message || "An error occured", {
@@ -129,7 +139,9 @@ const Page = ({
           `${Endpoints.updateStaff}?adminId=1234566`,
           {
             ...staffDetails,
-            monthlySalary: parseFloat(staffDetails.monthlySalary.replace(/,/g, "")),
+            monthlySalary: parseFloat(
+              staffDetails.monthlySalary.replace(/,/g, "")
+            ),
             updateType: "DELETE",
           }
         );
@@ -167,11 +179,21 @@ const Page = ({
         >
           <CustomInput
             register={register}
-            placeholder="Staff First Name and Last Name"
-            name="staffName"
+            placeholder="Staff First Name"
+            name="firstName"
             type="text"
-            errors={errors.staffName?.message}
-            label="Staff Name"
+            errors={errors.firstName?.message}
+            label="Staff First Name"
+            disabled
+          />
+          <CustomInput
+            register={register}
+            placeholder="Staff Last Name"
+            name="lastName"
+            type="text"
+            errors={errors.lastName?.message}
+            label="Staff Last Name"
+            
           />
 
           <CustomAmountInput
@@ -233,7 +255,6 @@ const InstructionModal = ({ isOpen, setIsOpen }: InstructionModalProps) => {
 
   return (
     <>
-
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child

@@ -43,7 +43,8 @@ const StaffWrapper = ({ staffs }: Props) => {
         .toString()
         .toLowerCase()
         .includes(search.toLowerCase()) ||
-      staff.staffName.toString().toLowerCase().includes(search.toLowerCase())
+      staff.firstName.toString().toLowerCase().includes(search.toLowerCase()) ||
+      staff.lastName.toString().toLowerCase().includes(search.toLowerCase())
     );
   });
   const placeholder = "Search by staff Id or staff Email or staff Name";
@@ -86,7 +87,9 @@ const StaffWrapper = ({ staffs }: Props) => {
                 <td>{index + 1}</td>
                 <td>{staff.staffId}</td>
                 <td> {staff.staffEmail}</td>
-                <td>{staff.staffName}</td>
+                <td>
+                  {staff.firstName} {staff.lastName}
+                </td>
                 <td> &#8358;{staff.monthlySalary.toLocaleString("en-us")}</td>
                 <td>
                   <Link
@@ -145,7 +148,7 @@ const exportToExcel = (staffs: Stafftype[]) => {
     return {
       StaffId: staff.staffId,
       StaffEmail: staff.staffEmail,
-      StaffName: staff.staffName,
+      StaffName: staff.firstName + " " + staff.lastName,
       monthlySalary: staff.monthlySalary,
     };
   });
