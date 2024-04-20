@@ -15,7 +15,7 @@ const getLoans = async (): Promise<LoansType[]> => {
 const Page =  () => {
   const { isLoading, data: loans, error } = useLoan();
   return (
-    <div className="flex  w-full items-center justify-center">
+    <div className="flex  w-full items-center justify-center ">
       {isLoading && (
         <div className=" py-36">
           <Spinner className="mx-auto text-20 w-16 h-16 animate-spin" />

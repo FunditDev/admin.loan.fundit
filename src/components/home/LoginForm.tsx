@@ -143,7 +143,7 @@ const LoginForm = () => {
                         className="animate-spin text-center mx-auto w-6 h-6 fill-white"
                       />
                     ) : (
-                      " Get Loan"
+                      " LOGIN"
                     )}
                   </CustomButton>
                 </div>

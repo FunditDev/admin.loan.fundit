@@ -225,7 +225,7 @@ const Page = ({
         <div>
           <CustomButton
             handleClick={handleDelete}
-            className=" !to-red-500 !from-red-500"
+            className=" !to-red-500 !from-red-500 cursor-not-allowed"
             type="button"
             disabled
           >

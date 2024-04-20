@@ -68,6 +68,7 @@ export async function POST(
           "Content-Type": "application/json",
           Authorization: token || "",
         },
+        credentials:"same-origin"
       }
     );
     const data = await res.json();
