@@ -8,7 +8,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Smartcash Admin",
   description: "Smartcash Admin for managing Staff Loans and transactions",
-  
 };
 
 export default function RootLayout({
@@ -24,7 +23,7 @@ export default function RootLayout({
         <link rel="icon" href="/smartcash-logo.svg" type="image/x-icon" />
       </head>
       <body>
-      <Provider>
+        <Provider>
           <div className="h-full">{children}</div>
         </Provider>
       </body>

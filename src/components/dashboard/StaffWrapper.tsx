@@ -52,7 +52,7 @@ const StaffWrapper = ({ staffs }: Props) => {
   return (
     <div className=" w-full mt-10 px-2 sm:px-10 md:mt-20">
       <h1 className="text-center mb-5">
-        <span className="text-2xl font-bold">Staff Loans</span>
+        <span className="text-2xl font-bold">Staff</span>
       </h1>
       <div className="flex justify-between items-center gap-10 mb-10">
         <Filter

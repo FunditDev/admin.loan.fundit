@@ -46,6 +46,12 @@ const LoanWrapper = ({ loans }: Props) => {
     );
   });
   const placeholder = "Search by staff id or amount taken or date taken";
+  const formatAmount = (amount: string) => {
+    if (typeof amount === "number") return amount;
+    else {
+      return parseFloat(amount?.replace(/,/g, "")).toFixed(2);
+    }
+  };
 
   return (
     <div className=" w-full mt-10 px-2 sm:px-10 md:mt-20">
@@ -53,7 +59,11 @@ const LoanWrapper = ({ loans }: Props) => {
         <span className="text-2xl font-bold">Staff Loans</span>
       </h1>
       <div className="flex justify-between items-center gap-10 mb-10">
-        <Filter setSearch={setSearch} search={search} placeholder={placeholder}/>
+        <Filter
+          setSearch={setSearch}
+          search={search}
+          placeholder={placeholder}
+        />
         <button
           onClick={() => exportToExcel(loans)}
           className="bg-green-500 text-white px-3 py-2 rounded-md flex-shrink-1"
@@ -69,6 +79,8 @@ const LoanWrapper = ({ loans }: Props) => {
               <th>Loan Request Date</th>
               <th>Amount Taken</th>
               <th>Total Repayment</th>
+              <th>Amount Paid</th>
+              <th>Outstanding</th>
               <th>
                 Tenor <span className="text-sm">(Month)</span>
               </th>
@@ -83,8 +95,53 @@ const LoanWrapper = ({ loans }: Props) => {
               >
                 <td>{loan.staffId}</td>
                 <td>{timeFormatter(loan.createdDate as unknown as Date)}</td>
-                <td> &#8358;{loan.amount}</td>
-                <td> &#8358;{loan.totalRepayment}</td>
+                <td>
+                  {" "}
+                  {parseFloat(formatAmount(loan.amount)).toLocaleString(
+                    "en-NG",
+                    {
+                      style: "currency",
+                      currency: "NGN",
+                    }
+                  )}
+                </td>
+                <td>
+                  {" "}
+                  {parseFloat(formatAmount(loan.totalRepayment)).toLocaleString(
+                    "en-NG",
+                    {
+                      style: "currency",
+                      currency: "NGN",
+                    }
+                  )}
+                </td>
+                <td>
+                  {" "}
+                  {loan.amountPaid ? (
+                    loan.amountPaid.toLocaleString("en-NG", {
+                      currency: "NGN",
+                      style: "currency",
+                    })
+                  ) : (
+                    <span>&#8358;0.00</span>
+                  )}
+                </td>
+                <td className="text-center px-3  text-gray-700 border">
+                  {loan.amountPaid
+                    ? (
+                        parseFloat(formatAmount(loan.totalRepayment)) -
+                        loan.amountPaid
+                      ).toLocaleString("en-NG", {
+                        style: "currency",
+                        currency: "NGN",
+                      })
+                    : parseFloat(
+                        formatAmount(loan.totalRepayment)
+                      ).toLocaleString("en-NG", {
+                        style: "currency",
+                        currency: "NGN",
+                      })}
+                </td>
                 <td>{loan.loanTenure.length}</td>
                 <td>Running</td>
               </tr>

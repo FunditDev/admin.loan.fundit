@@ -1,5 +1,5 @@
 "use client";
-import {Endpoints} from "@/utils/endpoint";
+import { Endpoints } from "@/utils/endpoint";
 import { fetcher } from "./fetcher";
 import useSWR from "swr";
 import { LoansType, Stafftype } from "@/utils/types";
@@ -19,7 +19,7 @@ export const useStaff = () => {
 
 export const useLoan = () => {
   const { isLoading, data, error } = useSWR<LoansType[]>(
-    Endpoints.getAllStaffLoans,
+    `${Endpoints.getAllStaffLoans}?limit=10&page=1`,
     fetcher
   );
   console.log(data, "data -->");

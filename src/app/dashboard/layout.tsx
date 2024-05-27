@@ -36,9 +36,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               className="w-24 h-24 -top-4 left-4 absolute overflow-hidden"
             />
           </Link>
-          <button className="" onClick={() => setMobileMenuOpen(true)} disabled>
+          {/* <button className="" onClick={() => setMobileMenuOpen(true)} disabled>
             <Bars3Icon className="h-8 w-8 text-white inline-block " />
-          </button>
+          </button> */}
           <MoblieNav
             mobileMenuOpen={mobileMenuOpen}
             setMobileMenuOpen={setMobileMenuOpen}

@@ -8,7 +8,7 @@ export type LoansType = {
   staffId: string;
   staffName: string;
   staffEmail: string;
-  amount: number;
+  amount: string;
   createdDate: string;
   loanStatus: string;
   loanId: string;
@@ -19,6 +19,7 @@ export type LoansType = {
   message: string;
   scorePercent: number;
   totalRepayment: string;
+  amountPaid: number;
 };
 export type LoanType = {
   amount: number;
