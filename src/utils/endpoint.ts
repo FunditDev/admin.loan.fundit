@@ -1,9 +1,9 @@
 export const Endpoints = {
-  loginAdmin: "/smartcash/adminLogin",
-  getAllStaffLoans: "/smartcash/getAllStaffLoans",
-  getStaffLoans: "/smartcash/getStaffLoans",
-  getAllStaff: "/smartcash/getAllStaff",
-  getStaff: "/smartcash/getStaff",
-  updateStaff: "/smartcash/updateStaff",
-  deleteStaff: "/smartcash/deleteStaff",
+  loginAdmin: "/v1/smartcash/adminLogin",
+  getAllStaffLoans: "/v1/smartcash/getAllStaffLoans",
+  getStaffLoans: "/v1/smartcash/getStaffLoans",
+  getAllStaff: "/v1/smartcash/getAllStaff",
+  getStaff: "/v1/smartcash/getStaff",
+  updateStaff: "/v1/smartcash/updateStaff",
+  deleteStaff: "/v1/smartcash/deleteStaff",
 };

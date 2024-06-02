@@ -14,12 +14,21 @@ export type LoansType = {
   loanId: string;
   loanTenure: {
     month: number;
-    amount: string;
+      amount: string;
+      repaymentDate: Date;
+      amountPaid: number;
+      interestPenalty: number;
+      fullyPaid: boolean;
+      dateFullyPaid: Date;
   }[];
   message: string;
   scorePercent: number;
   totalRepayment: string;
   amountPaid: number;
+  repayment: {
+    repaymentAmount: number;
+    date: Date;
+  }[];
 };
 export type LoanType = {
   amount: number;

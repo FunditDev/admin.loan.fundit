@@ -47,7 +47,7 @@ const StaffWrapper = ({ staffs }: Props) => {
       staff.lastName.toString().toLowerCase().includes(search.toLowerCase())
     );
   });
-  const placeholder = "Search by staff Id or staff Email or staff Name";
+  const placeholder = "Search by Staff Id or Staff Email or Staff Name";
 
   return (
     <div className=" w-full mt-10 px-2 sm:px-10 md:mt-20">
@@ -87,7 +87,7 @@ const StaffWrapper = ({ staffs }: Props) => {
                 <td>{index + 1}</td>
                 <td>{staff.staffId}</td>
                 <td> {staff.staffEmail}</td>
-                <td>
+                <td className="capitalize">
                   {staff.firstName} {staff.lastName}
                 </td>
                 <td> &#8358;{staff.monthlySalary.toLocaleString("en-us")}</td>

@@ -52,7 +52,20 @@ const LoanWrapper = ({ loans }: Props) => {
       return parseFloat(amount?.replace(/,/g, "")).toFixed(2);
     }
   };
-
+  const calRemainingTenor = (
+    tenor: {
+      month: number;
+      amount: string;
+      repaymentDate: Date;
+      amountPaid: number;
+      interestPenalty: number;
+      fullyPaid: boolean;
+      dateFullyPaid: Date;
+    }[]
+  ) => {
+    const remainingTenor = tenor.filter((t) => !t.fullyPaid);
+    return remainingTenor.length;
+  };
   return (
     <div className=" w-full mt-10 px-2 sm:px-10 md:mt-20">
       <h1 className="text-center mb-5">
@@ -143,7 +156,9 @@ const LoanWrapper = ({ loans }: Props) => {
                       })}
                 </td>
                 <td>{loan.loanTenure.length}</td>
-                <td>Running</td>
+                <td>{
+                  calRemainingTenor(loan.loanTenure) > 0 ? "Running" : "Completed"
+                  }</td>
               </tr>
             ))}
           </tbody>
@@ -197,6 +212,7 @@ const exportToExcel = (loans: LoansType[]) => {
       StaffName: loan.staffName,
       AmountTaken: loan.amount,
       TotalRepayment: loan.totalRepayment,
+      TotalRepaid: loan.amountPaid,
       Tenor:
         loan.loanTenure.length > 1
           ? `${loan.loanTenure.length} months`
