@@ -2,7 +2,7 @@
 import { LoansType, Stafftype } from "@/utils/types";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import Filter from "./Filter";
+import Filter from "./SearchFilter";
 import * as XLSX from "xlsx";
 import Link from "next/link";
 type Props = {

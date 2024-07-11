@@ -3,23 +3,30 @@ export interface LoginType {
   password: string;
 }
 
-export type tokenType = "token" | "refreshToken";
+export type tokenType = "token" | "refreshToken"| "staff";
 export type LoansType = {
+  staff: {
+    staffId: string;
+    staffName: string;
+    staffEmail: string;
+  };
   staffId: string;
-  staffName: string;
-  staffEmail: string;
   amount: string;
+  amountRequested: string;
   createdDate: string;
-  loanStatus: string;
   loanId: string;
+  loanStatus: string;
+  acceptanceMessage: string;
   loanTenure: {
     month: number;
-      amount: string;
-      repaymentDate: Date;
-      amountPaid: number;
-      interestPenalty: number;
-      fullyPaid: boolean;
-      dateFullyPaid: Date;
+    amount: string;
+    repaymentDate: Date;
+    amountPaid: number;
+    interestPenalty: number;
+    fullyPaid: boolean;
+    dateFullyPaid: Date;
+    partialPayment: number;
+    originalAmount:string;
   }[];
   message: string;
   scorePercent: number;
@@ -29,6 +36,9 @@ export type LoansType = {
     repaymentAmount: number;
     date: Date;
   }[];
+  fullyPaid: boolean;
+  interestPenalty: number;
+  pendingLoanId: string;
 };
 export type LoanType = {
   amount: number;
@@ -44,10 +54,10 @@ export type LoanType = {
   totalRepayment: string;
 };
 
-export type Stafftype ={
+export type Stafftype = {
   staffId: string;
   firstName: string;
   lastName: string;
   staffEmail: string;
   monthlySalary: number;
-}
+};

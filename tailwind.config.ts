@@ -11,12 +11,16 @@ const config: Config = {
       container: {
         padding: {
           DEFAULT: "1rem",
-          sm: "2rem",
+          sm: "1rem",
+          md: "2rem",
           lg: "4rem",
           xl: "5rem",
-          '2xl': '6rem',
+          "2xl": "6rem",
         },
         center: true,
+      },
+      boxShadow: {
+        custom: "0 0 5px 0 rgba(0, 0, 0, 0.1)",
       },
     },
   },

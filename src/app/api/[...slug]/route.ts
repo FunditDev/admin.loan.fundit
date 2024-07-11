@@ -18,7 +18,7 @@ export async function GET(
   const constructedPath = pathname.replace("/api/", "");
   const withSearch = `${constructedPath}${search}`;
   const token = request.headers.get("Authorization");
-  console.log("url -->", url, "path -->", constructedPath);
+  console.log("url -->", url, "path -->", constructedPath,'with search',withSearch);
   try {
     const getData = await fetch(
       `${url}/${withSearch ? withSearch : constructedPath}`,
@@ -30,14 +30,16 @@ export async function GET(
       }
     );
     const data = await getData.json();
-    console.log(data, "data -->");
+    // console.log(data, "data -->");
 
     return new Response(JSON.stringify(data), {
       status: data.status || data.statusCode,
     });
-  } catch (e) {
-    console.log("error -->",e);
-    return NextResponse.json(e);
+  } catch (e:any) {
+    console.log("error -->", e);
+    return new Response(JSON.stringify({ error: e.message }), {
+      status: e.statusCode || 500,
+    });
   }
 }
 
@@ -68,7 +70,7 @@ export async function POST(
           "Content-Type": "application/json",
           Authorization: token || "",
         },
-        credentials:"same-origin"
+        credentials: "same-origin",
       }
     );
     const data = await res.json();
@@ -77,8 +79,11 @@ export async function POST(
       status: data.status || data.statusCode,
     });
   } catch (e: any) {
-    console.log("error -->", e);
-    return NextResponse.json({ error: e.message }, { status: e.statusCode });
+    console.log("error here -->", e);
+
+    return new Response(JSON.stringify({ error: e.message }), {
+      status: e.statusCode || 500,
+    });
   }
 }
 export async function PUT(

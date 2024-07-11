@@ -5,9 +5,9 @@ type props = {
   search: string;
   placeholder?: string;
 };
-const Filter = ({ setSearch, search,placeholder }: props) => {
+const SearchFilter = ({ setSearch, search,placeholder }: props) => {
   return (
-    <div className="flex-1">
+    <div className="flex-1 max-md:w-full">
       <input
         type="text"
         placeholder={placeholder}
@@ -20,4 +20,4 @@ const Filter = ({ setSearch, search,placeholder }: props) => {
   );
 };
 
-export default Filter;
+export default SearchFilter;

@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 // import { useAppDispatch, useAppSelector } from "@/redux/reduxType";
 // import { loginUser } from "@/redux/slices/auth.slice";
-import Spinner from "../icons/Spinner";
+import Spinner, { SpinnerTwo } from "../icons/Spinner";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
@@ -18,10 +18,11 @@ import smartcash from "@public/smartcash-logo.svg";
 import { processNoAuth } from "@/utils/http";
 import { Endpoints } from "@/utils/endpoint";
 import { toast } from "react-toastify";
+import { setToken } from "@/utils/token";
 
 const schema = yup.object().shape({
   staffId: yup.string().trim().required("Staff Id is required"),
-    password: yup.string().trim().required("Password is required"),
+  password: yup.string().trim().required("Password is required"),
 });
 
 const LoginForm = () => {
@@ -49,35 +50,36 @@ const LoginForm = () => {
   //     }
   //   }, []);
   const handleLoginSumbit = async (data: LoginType) => {
-    router.push("/dashboard");
-    // try {
-    //   const rs = await processNoAuth("post", Endpoints.getSmartcashStaff, data);
-    //   console.log("rs -->", rs);
-    //   if (rs?.data.otp && rs.data.otp.length >= 6) {
-    //     console.log(rs);
-    //     toast.success("An OTP has been sent to your email", {
-    //       toastId: "otp_sent",
-    //       position: "top-right",
-    //     });
-    //     localStorage.setItem("staff", JSON.stringify(rs.data.staffDetails));
-    //     localStorage.setItem("token", rs.data.token);
-    //     router.push("/dashboard");
-    //     // router.push("/dashboard");
-    //   }
-    // } catch (err: any) {
-    //   console.log(err, "error");
-    //   if (err.status === 401) {
-    //     alert("Invalid Staff Id");
-    //   } else {
-    //     console.log(err, "error");
-    //     toast.error(err.message, {
-    //       toastId: "error",
-    //       autoClose: 4000,
-    //       pauseOnHover: true,
-    //       className: "bg-red-500 text-white font-bold ",
-    //     });
-    //   }
-    // }
+    // router.push("/dashboard");
+    try {
+      const rs = await processNoAuth("post", Endpoints.loginAdmin, data);
+      console.log("rs -->", rs);
+      if (rs?.data) {
+        toast.success("Login Successful", {
+          toastId: "success",
+          position: "top-right",
+        });
+        setToken("token", rs.data.token);
+        setToken("staff", JSON.stringify(rs.data.staff));
+
+        router.push("/dashboard");
+        // router.push("/dashboard");
+      }
+    } catch (err: any) {
+      console.log(err, "error");
+      if (err.status === 401) {
+        alert("Invalid Staff Id");
+      } else {
+        console.log(err, "error");
+        toast.error(err.message, {
+          toastId: "error",
+          autoClose: 4000,
+          pauseOnHover: true,
+          className: "bg-red-500 text-white font-bold ",
+          position: "top-right",
+        });
+      }
+    }
   };
   return (
     <section className=" bg-gradient-to-br from-[#d09192] to-[#c82471] ">
@@ -137,10 +139,10 @@ const LoginForm = () => {
                 <div>
                   <CustomButton type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
-                      <Spinner
+                      <SpinnerTwo
                         width="20"
                         fill="white"
-                        className="animate-spin text-center mx-auto w-6 h-6 fill-white"
+                        className=" text-center !mx-auto !w-6 !h-6"
                       />
                     ) : (
                       " LOGIN"

@@ -178,7 +178,7 @@ export const processNoAuth = async (
     if (callback) {
       callback(path, rt.data);
     }
-    console.log(rt, "rt");
+    // console.log(rt.data, "rt");
     if (rt.status === 200 || rt.status === 201) {
       return { data: rt.data, status: rt.status };
     }
