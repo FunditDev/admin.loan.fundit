@@ -64,7 +64,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       </header>
       <div className="bg-gray-100">
         <div className="container">
-          <div className="flex flex-col items-center justify-center min-h-screen py-0 relative">
+          <div className="flex flex-col items-center justify-center min-h-screen pb-10 relative">
             {/* <button
               onClick={() => router.back()}
               className="absolute left-10 top-20 z-20  md:top-24 md:left-10 text-black underline rounded-md"
