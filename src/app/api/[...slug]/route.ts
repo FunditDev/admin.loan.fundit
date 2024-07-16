@@ -3,9 +3,13 @@ import next from "next";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
+// const url =
+//   process.env.NODE_ENV === "production"
+//     ? "https://api.fundit.com.ng"
+//     : "http://localhost:3800";
 const url =
   process.env.NODE_ENV === "production"
-    ? "https://api.fundit.com.ng"
+    ? "https://stingray-app-v6836.ondigitalocean.app/api"
     : "http://localhost:3800";
 export async function GET(
   request: Request,
