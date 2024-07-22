@@ -7,7 +7,6 @@ import Link from "next/link";
 import SearchFilter from "./SearchFilter";
 import OtherFilters from "./OtherFilters";
 import { useFilterLoan } from "@/hooks/usePendingUpdate";
-import { SpinnerTwo } from "../icons/Spinner";
 import {
   Dialog,
   DialogBackdrop,
@@ -17,7 +16,6 @@ import {
 import { Description } from "node_modules/@headlessui/react/dist/components/description/description";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { set } from "react-hook-form";
 
 type Props = {
   loans: LoansType[];
@@ -106,7 +104,7 @@ const LoanWrapper = () => {
     setOffset(newOffset);
   };
 
-  const placeholder = "Search by Staff Id or Amount taken or Date";
+  const placeholder = "Search by Staff Id or Amount taken";
 
   const formatAmount = (amount: string | number) => {
     if (typeof amount === "number") return amount.toFixed(2);

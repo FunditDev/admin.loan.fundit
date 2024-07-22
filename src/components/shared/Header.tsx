@@ -1,63 +1,106 @@
-"use client";
-import { Dialog } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/20/solid";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-
-const navigation = [];
-type MoblieNavProps = {
-  mobileMenuOpen: boolean;
-  setMobileMenuOpen: (val: boolean) => void;
+import { Endpoints } from "@utils/endpoint";
+import { processWithAuth } from "@utils/http";
+import { removeToken } from "@/utils/token";
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import {
+  Bars3Icon,
+  UserCircleIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/20/solid";
+import { useRouter } from "next/navigation";
+import React, { Fragment } from "react";
+import { toast } from "react-toastify";
+type Props = {
+  setSidebarOpen: (value: boolean) => void;
 };
-const MoblieNav = ({ mobileMenuOpen, setMobileMenuOpen }: MoblieNavProps) => {
+const Header = ({ setSidebarOpen }: Props) => {
+  // const user = useAppSelector((state) => state.user?.user);
+  // const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const handleLogOut = async () => {
+    try {
+      const res = await processWithAuth("get", Endpoints.logout);
+      toast.success("Logout Successful");
+      removeToken("token");
+      // removeToken("refreshToken");
+      router.push("/");
+      // dispatch(logOutUser());
+      // await logoutAction();
+    } catch (error: any) {
+      console.log(error, "res");
+      toast.error(error?.response?.data.message);
+    } finally {
+      toast.success("Logout Successful");
+      removeToken("token");
+      router.push("/");
+      // dispatch(logOutUser());
+      // await logoutAction();
+    }
+  };
   return (
-    <Dialog
-      as="div"
-      className=""
-      open={mobileMenuOpen}
-      onClose={setMobileMenuOpen}
-    >
-      <div className="fixed inset-0 z-10" />
-      <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px pb-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-        <div className="flex items-center justify-between gap-x-6 h-16 !bg-transparent ">
-          <div className="flex items-center justify-between w-full px-6">
-            <Link href="/" className="px-2 py-2 inline-flex">
-              <span className="sr-only">smartcash</span>
-              <Image
-                src="/smartcash-logo.svg"
-                alt="Fundit Logo"
-                width="100"
-                height="100"
-                className="w-24 h-24 -top-4 left-4 absolute overflow-hidden"
+    <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+      <button
+        type="button"
+        className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+        onClick={() => setSidebarOpen(true)}
+      >
+        <span className="sr-only">Open sidebar</span>
+        <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+      </button>
+      <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+      <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+        <div className="flex items-center  flex-1 justify-end gap-x-4 lg:gap-x-6">
+          <div
+            className="hidden lg:block justify-end lg:h-6 lg:w-px lg:bg-gray-900/10"
+            aria-hidden="true"
+          />
+          <Menu as="div" className="relative">
+            <MenuButton className="-m-1.5 flex items-center p-1.5">
+              <span className="sr-only">Open user menu</span>
+              <UserCircleIcon
+                className="h-6 w-6 text-gray-400"
+                aria-hidden="true"
               />
-            </Link>
-            <button
-              type="button"
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-              onClick={() => setMobileMenuOpen(false)}
+              <span className="flex lg:items-center">
+                <span
+                  className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                  aria-hidden="true"
+                >
+                  {/* {user?.firstname} {user?.lastname} */}
+                </span>
+                <ChevronDownIcon
+                  className="ml-2 h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </span>
+            </MenuButton>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
             >
-              <span className="sr-only">Close menu</span>
-              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
+              <MenuItems className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                <MenuItem>
+                  <button
+                    className=" px-3 py-1 text-sm leading-6 text-gray-900 flex gap-4 justify-center items-center"
+                    onClick={handleLogOut}
+                  >
+                    <UserCircleIcon className="w-6 h-6 text-black" />
+                    <span>Logout</span>
+                  </button>
+                </MenuItem>
+              </MenuItems>
+            </Transition>
+          </Menu>
         </div>
-        <div className="mt-6 flow-root ">
-          <div className="-my-6 divide-y divide-gray-500/10">
-            <div className="space-y-2 py-6 w-full">
-              <Link
-                href={"/loan-records"}
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-3 px-5 bg-gray-50 w-full inline-flex font-medium"
-              >
-                Loan Records
-              </Link>
-            </div>
-          </div>
-        </div>
-      </Dialog.Panel>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 
-export default MoblieNav;
+export default Header;

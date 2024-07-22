@@ -7,12 +7,14 @@ type CustomAmountInputProps = {
   className?: string;
   placeholder: string;
   errors?: string;
+  outerClassName?:string
+  disabled?: boolean;
 };
 
 const CustomAmountInput = forwardRef<
   HTMLInputElement,
   CustomAmountInputProps & ReturnType<UseFormRegister<any>>
->(({ onChange, onBlur, name, label, placeholder, errors, className }, ref) => {
+>(({ onChange, onBlur, name, label, placeholder, errors, className,outerClassName,disabled }, ref) => {
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const newval = value.replace(/[^0-9.]/g, "");
@@ -26,7 +28,7 @@ const CustomAmountInput = forwardRef<
     }
   };
   return (
-    <div>
+    <div className={outerClassName}>
       <label
         htmlFor={name}
         className="block text-sm font-medium leading-6 text-yellow-400"
@@ -43,6 +45,7 @@ const CustomAmountInput = forwardRef<
           onBlur={onBlur}
           onChange={handleChange}
           name={name}
+          disabled={disabled}
         />
       </div>
       {errors && (

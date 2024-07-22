@@ -43,7 +43,7 @@ export default function CustomInput({
     <div className={outerClassName}>
       <label
         htmlFor={name}
-        className={`block text-sm font-medium leading-6 text-yellow-400 ${labelClassName}`}
+        className={`block text-sm font-medium leading-6 text-yellow-500 w-fit ${labelClassName}`}
       >
         {label}
       </label>

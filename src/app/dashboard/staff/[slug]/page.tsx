@@ -2,9 +2,9 @@
 import CustomAmountInput from "@/components/forms/CustomAmountInput";
 import CustomButton from "@/components/forms/CustomButton";
 import CustomInput from "@/components/forms/CustomInput";
-import Spinner from "@/components/icons/Spinner";
+import Spinner, { SpinnerTwo } from "@/components/icons/Spinner";
 import { Endpoints } from "@/utils/endpoint";
-import { processNoAuth } from "@/utils/http";
+import { processNoAuth, processWithAuth } from "@/utils/http";
 import { Transition, Dialog } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
 import { set, useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ type StaffType = {
   firstName: string;
   lastName: string;
   staffEmail: string;
-  monthlySalary: string;
+  earnings: string;
   staffId: string;
 };
 
@@ -28,16 +28,17 @@ const Page = ({
   const fetchStaff = async () => {
     setIsFetching(true);
     try {
-      const res = await processNoAuth(
+      const res = await processWithAuth(
         "get",
         `${Endpoints.getStaff}/${params.slug}`
       );
       if (res && res.data) {
         setIsFetching(false);
         const data = res.data;
+        // console.log(data, "data -->");
         setStaffDetails({
           ...data,
-          monthlySalary: data?.monthlySalary.toLocaleString("en-Us"),
+          earnings: data?.earnings.toLocaleString("en-Us"),
         });
       }
     } catch (e) {
@@ -49,7 +50,7 @@ const Page = ({
     firstName: "",
     lastName: "",
     staffEmail: "",
-    monthlySalary: "0",
+    earnings: "0",
     staffId: "",
   });
   const [isfetching, setIsFetching] = useState(true);
@@ -62,7 +63,9 @@ const Page = ({
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
+    getValues,
   } = useForm<StaffType>();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     fetchStaff();
@@ -73,7 +76,7 @@ const Page = ({
       lastName: staffDetails.lastName,
       firstName: staffDetails.firstName,
       staffEmail: staffDetails.staffEmail,
-      monthlySalary: staffDetails.monthlySalary,
+      earnings: staffDetails.earnings,
     });
   }, [staffDetails]);
   const handleUpdate = async (data: StaffType) => {
@@ -91,12 +94,12 @@ const Page = ({
         return;
       }
       try {
-        const res = await processNoAuth(
+        const res = await processWithAuth(
           "post",
-          `${Endpoints.updateStaff}?adminId=1234566`,
+          `${Endpoints.updateStaff}`,
           {
             ...data,
-            monthlySalary: parseFloat(data.monthlySalary.replace(/,/g, "")),
+            earnings: parseFloat(data.earnings.replace(/,/g, "")),
             staffId: staffDetails.staffId,
             updateType: "UPDATE",
           }
@@ -113,6 +116,17 @@ const Page = ({
         });
       } catch (e: any) {
         console.log("error -->", e);
+        if (Array.isArray(e.message)) {
+          toast.error(e?.message[0] || "An error occured", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
         toast.error(e?.message || "An error occured", {
           position: "top-right",
           autoClose: 5000,
@@ -127,6 +141,69 @@ const Page = ({
       return;
     }
   };
+  const handleUpdateApprove = async (data: StaffType) => {
+    const confirmSubmit = confirm(
+      "Are you sure you want to update this staff?"
+    );
+    if (confirmSubmit) {
+      if (staffDetails.staffEmail !== data.staffEmail) {
+        alert("You cannot update the staff email");
+        return;
+      }
+      if (staffDetails.firstName !== data.firstName) {
+        alert("You cannot update the staff First Name");
+        return;
+      }
+      setIsUpdating(true);
+      try {
+        const res = await processWithAuth(
+          "post",
+          `${Endpoints.updateAndApprove}`,
+          {
+            ...data,
+            earnings: parseFloat(data.earnings.replace(/,/g, "")),
+            staffId: staffDetails.staffId,
+            updateType: "UPDATE",
+          }
+        );
+        setIsUpdating(false);
+        toast.success("Update Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } catch (e: any) {
+        console.log("error -->", e);
+        setIsUpdating(false);
+        if (Array.isArray(e.message)) {
+          toast.error(e?.message[0] || "An error occured", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        toast.error(e?.message || "An error occured", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } else {
+      return;
+    }
+  }
   const handleDelete = async () => {
     return;
     const confirmSubmit = confirm(
@@ -139,9 +216,7 @@ const Page = ({
           `${Endpoints.updateStaff}?adminId=1234566`,
           {
             ...staffDetails,
-            monthlySalary: parseFloat(
-              staffDetails.monthlySalary.replace(/,/g, "")
-            ),
+            earnings: parseFloat(staffDetails.earnings.replace(/,/g, "")),
             updateType: "DELETE",
           }
         );
@@ -164,13 +239,13 @@ const Page = ({
   };
   if (isfetching)
     return (
-      <div className="flex justify-center items-center">
-        <Spinner className="fill-gray-600 h-16 w-16 text-xl stroke-2 animate-spin" />
+      <div className="flex justify-center items-center py-20">
+        <SpinnerTwo className="!h-10 !w-10  stroke-2" />
       </div>
     );
 
   return (
-    <div className="bg-white shadow-sm px-5 sm:px-10 py-10 rounded-md w-full  max-w-[400px] sm:max-w-[500px] sm:min-w-[420px]">
+    <div className="bg-white shadow-sm px-5 sm:px-10 py-10 rounded-md w-full  max-w-[400px] mx-auto sm:max-w-[600px] sm:min-w-[420px]">
       <h1 className="font-bold text-2xl text-center">Staff - {params.slug}</h1>
       <div className="flex flex-col mt-10">
         <form
@@ -193,15 +268,14 @@ const Page = ({
             type="text"
             errors={errors.lastName?.message}
             label="Staff Last Name"
-            
           />
 
           <CustomAmountInput
-            {...register("monthlySalary")}
-            placeholder="Update Monthly Salary"
-            name="monthlySalary"
-            errors={errors.monthlySalary?.message}
-            label="Monthly Salary"
+            {...register("earnings")}
+            placeholder="Update Earnings"
+            name="earnings"
+            errors={errors.earnings?.message}
+            label="Earnings"
           />
           <CustomInput
             register={register}
@@ -213,16 +287,27 @@ const Page = ({
             disabled
             aria-disabled
           />
-          <CustomButton disabled={isSubmitting} type="submit">
+          <div className=" flex gap-4 sm:gap-10 items-center flex-col sm:flex-row">
+
+          <CustomButton disabled={isSubmitting || isUpdating} type="submit" outerClassName="w-full">
             {isSubmitting ? (
-              <Spinner className="fill-white text-5 w-5 mx-auto animate-spin" />
+              <SpinnerTwo className="!w-5 !mx-auto" />
             ) : (
               "Update Staff Details"
             )}
           </CustomButton>
+          <CustomButton disabled={isSubmitting || isUpdating} type="button" outerClassName="w-full" handleClick={()=>handleUpdateApprove(getValues())}>
+            {isUpdating ? (
+              <SpinnerTwo className="!w-5 !mx-auto" />
+            ) : (
+              "Update And Approve"
+            )}
+          </CustomButton>
+          </div>
         </form>
-        <p className="text-center py-2">Or</p>
-        <div>
+        {/* Uncomment if need for deleting staff arise */}
+        {/* <p className="text-center py-2">Or</p> */}
+        {/* <div>
           <CustomButton
             handleClick={handleDelete}
             className=" !to-red-500 !from-red-500 cursor-not-allowed"
@@ -231,7 +316,7 @@ const Page = ({
           >
             Delete Staff
           </CustomButton>
-        </div>
+        </div> */}
       </div>
       <InstructionModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
@@ -289,8 +374,8 @@ const InstructionModal = ({ isOpen, setIsOpen }: InstructionModalProps) => {
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      You can only update the Staff&apos;s Monthly Salary and
-                      First Name.
+                      You can only update the Staff&apos;s Earnings and First
+                      Name.
                     </p>
                     <p className="text-sm text-gray-500">
                       You cannot update the staff&apos;s Email or Last Name.

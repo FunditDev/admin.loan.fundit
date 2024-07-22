@@ -9,7 +9,8 @@ let httpNoAuth;
 let refreshToking = false;
 const baseURL =
   process.env.NODE_ENV === "production"
-    ? "https://www.admin.smartcash.fundit.com.ng/api"
+    ? "https://admin.smartcash.fundit.com.ng/api" ||
+      "https://www.admin.smartcash.fundit.com.ng/api"
     : "http://localhost:3300/api";
 
 if (typeof window !== undefined) {
@@ -101,23 +102,25 @@ export const processWithAuth = async (
     if (callback) {
       callback(path, rt.data);
     }
+
     return { data: rt.data, status: rt.status };
   } catch (error) {
     if (error instanceof AxiosError) {
-      if (error?.response?.status === 401 && !refreshToking) {
-        const refreshedUser = await refreshUser();
-        if (refreshedUser) {
-          return await processWithAuth(method, path, data, callback);
-        }
-      } else if (
-        !refreshToking &&
-        error?.response?.data?.message.toLowerCase().includes("unauthorized")
-      ) {
-        const refreshedUser = await refreshUser();
-        if (refreshedUser) {
-          return await processWithAuth(method, path, data, callback);
-        }
-      }
+      // if (error?.response?.status === 401 && !refreshToking) {
+      //   const refreshedUser = await refreshUser();
+      //   if (refreshedUser) {
+      //     return await processWithAuth(method, path, data, callback);
+      //   }
+      // } else if (
+      //   !refreshToking &&
+      //   error?.response?.status === 401 &&
+      //   error?.response?.data?.message.toLowerCase().includes("unauthorized")
+      // ) {
+      //   const refreshedUser = await refreshUser();
+      //   if (refreshedUser) {
+      //     return await processWithAuth(method, path, data, callback);
+      //   }
+      // }
       console.log(error, "error from rt2");
       if (callback) {
         callback(path, null, error);

@@ -37,7 +37,7 @@ const DashboardPage = () => {
     getDashboardData();
   }, []);
   return (
-    <div className="flex  w-full items-start">
+    <div className="flex  w-full items-start mt-10">
       {isLoading && <SpinnerTwo className="!mx-auto " />}
       {!isLoading && (
         <div className="grid items-center sm:grid-cols-2 md:grid-cols-3 gap-8 w-full">
@@ -48,7 +48,7 @@ const DashboardPage = () => {
             <ArrowRightIcon className="h-5 w-5" />
           </Link>
         </div> */}
-          <div className="py-10 px-4 min-h-52 h-full shadow-custom border text-center rounded-md flex bg-blue-500 text-white flex-col gap-10">
+          <div className="py-10 px-4 min-h-52 h-full shadow-custom border text-center rounded-md flex bg-blue-500 text-white flex-col gap-10 relative">
             <div className=" font-bold gap-1 flex items-center justify-center flex-col ">
               <div className="gap-1 flex items-center justify-center">
                 Total Loan Amount ({dashboardData.totalLoansCount})
@@ -57,9 +57,9 @@ const DashboardPage = () => {
             </div>
             <Link
               href="/dashboard/loans"
-              className="text-blue-100 font-bold gap-1 flex items-center justify-center"
+              className="text-blue-100 font-bold gap-1 flex items-center justify-center bottom-10 inset-x-0 absolute"
             >
-              View
+              View All
               <ArrowRightIcon className="h-5 w-5" />
             </Link>
           </div>
@@ -71,15 +71,15 @@ const DashboardPage = () => {
               </div>
               <p>{dashboardData.currentLoansDueForRepaymentAmount}</p>
             </div>
-            {/* <Link
+            <Link
             href="/dashboard/loans"
-            className="text-green-100 font-bold gap-1 flex items-center justify-center"
+            className="text-green-100 font-bold gap-1 flex items-center justify-center bottom-10 inset-x-0"
           >
-            View
+            View All
             <ArrowRightIcon className="h-5 w-5" />
-          </Link> */}
+          </Link>
           </div>
-          <div className="py-10 px-4 min-h-52 h-full bg-red-500 shadow-custom border text-center rounded-md flex flex-col gap-10">
+          <div className="py-10 px-4 min-h-52 h-full bg-red-500 shadow-custom border text-center rounded-md flex flex-col gap-10 relative" >
             {/* <BanknotesIcon className="h-20 w-20 mx-auto text-blue-500" /> */}
             <div className="text-white font-bold gap-1 flex items-center justify-center  flex-col">
               <div className="gap-1 flex items-center justify-center ">
@@ -87,13 +87,13 @@ const DashboardPage = () => {
               </div>
               <p>{dashboardData.notPerformingLoansAmount}</p>
             </div>
-            {/* <Link
+            <Link
             href="/dashboard/loans"
-            className="text-red-100 font-bold gap-1 flex items-center justify-center"
+            className="text-red-100 font-bold gap-1 flex items-center justify-center absolute bottom-10 inset-x-0"
           >
-            View
+            View All
             <ArrowRightIcon className="h-5 w-5" />
-          </Link> */}
+          </Link>
           </div>
         </div>
       )}

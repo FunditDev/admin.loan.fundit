@@ -59,5 +59,23 @@ export type Stafftype = {
   firstName: string;
   lastName: string;
   staffEmail: string;
-  monthlySalary: number;
+  earnings: number;
 };
+
+export type PendingStaffUpdate = {
+  isPendingUpdate: boolean;
+  updateType: "UPDATE" | "DELETE";
+} & Stafftype;
+
+export type Updatetype =
+{
+  staffId: string;
+  firstName: string;
+  lastName: string;
+  staffEmail: string;
+  earnings: string;
+  isPendingUpdate: boolean;
+  updateType: "UPDATE" | "DELETE";
+
+}
+

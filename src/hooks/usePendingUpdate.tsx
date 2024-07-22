@@ -1,15 +1,15 @@
 "use client";
 import { Endpoints } from "@/utils/endpoint";
-import { fetcher } from "./fetcher";
+import { fetcher, fetcherWithAuth } from "./fetcher";
 import useSWR from "swr";
-import { LoansType, Stafftype } from "@/utils/types";
+import { LoansType, PendingStaffUpdate, Stafftype } from "@/utils/types";
 
 export const useStaff = () => {
   const { isLoading, data, error } = useSWR<Stafftype[]>(
     Endpoints.getAllStaff,
-    fetcher
+    fetcherWithAuth,
+    { revalidateOnMount: true, revalidateOnFocus: false }
   );
-  console.log(data, "data -->");
   return {
     isLoading,
     data,
@@ -44,7 +44,7 @@ export const useFilterLoan = ({
           dateTaken &&
           dateTaken?.length > 0 &&
           `${Endpoints.getAllStaffLoans}?limit=10&page=1&dateField=${dateTaken}&search=${search}`,
-    fetcher,
+    fetcherWithAuth,
     { revalidateOnMount: true, revalidateOnFocus: false }
   );
   return {
@@ -65,6 +65,32 @@ export const useSingleSmartcashloan = ({
   const { isLoading, data, error } = useSWR<LoansType>(
     `${Endpoints.getSingleStaffLoanById}/${loanId}?staffId=${staffId}`,
     fetcher
+  );
+  return {
+    isLoading,
+    data,
+    error,
+  };
+};
+
+export const usePendingUpdate = () => {
+  const { isLoading, data, error } = useSWR<PendingStaffUpdate[]>(
+    Endpoints.getPendingUpdate,
+    fetcherWithAuth
+  );
+  return {
+    isLoading,
+    data,
+    error,
+  };
+};
+export const usePendingUpdatePage = () => {
+  const { isLoading, data, error } = useSWR<PendingStaffUpdate[]>(
+    Endpoints.getPendingUpdate,
+    fetcherWithAuth,{
+    revalidateOnMount: true,
+    revalidateOnFocus: false,
+    }
   );
   return {
     isLoading,

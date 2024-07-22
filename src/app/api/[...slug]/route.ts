@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 //     : "http://localhost:3800";
 const url =
   process.env.NODE_ENV === "production"
-    ? "https://stingray-app-v6836.ondigitalocean.app/api"
+    ? "https://api.fundit.com.ng/api"
     : "http://localhost:3800";
 export async function GET(
   request: Request,
@@ -40,10 +40,17 @@ export async function GET(
       status: data.status || data.statusCode,
     });
   } catch (e:any) {
-    console.log("error -->", e);
-    return new Response(JSON.stringify({ error: e.message }), {
-      status: e.statusCode || 500,
-    });
+    const error = JSON.stringify(e);
+    const parsedError = JSON.parse(error);
+    console.log("error -->", JSON.stringify(e), parsedError);
+    if (parsedError.cause.code === "ECONNREFUSED") {
+      return new Response(
+        JSON.stringify({ error: "Network Error" }),
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({ error: e.message }, { status: e.statusCode });
+  
   }
 }
 
