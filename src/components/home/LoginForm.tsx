@@ -33,7 +33,7 @@ const LoginForm = () => {
   } = useForm<LoginType>({
     resolver: yupResolver(schema),
     defaultValues: {
-      staffId: "123456789",
+      staffId: "",
     },
   });
   // const dispatch = useAppDispatch();
