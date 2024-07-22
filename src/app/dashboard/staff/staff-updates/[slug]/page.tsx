@@ -171,7 +171,7 @@ const Page = ({
           {incomingUpdate ? (
             <IncomingUpdate
               slug={params.slug}
-              incomingUpdate={incomingUpdate as Updatetype}
+              incomingUpdate={incomingUpdate as unknown as Updatetype}
             />
           ) : (
             <div className="w-full max-w-[500px]">
