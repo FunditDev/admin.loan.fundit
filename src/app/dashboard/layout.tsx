@@ -2,7 +2,6 @@
 import LargeSidebar from "@components/shared/LargeSidebar";
 import MobileSidebar from "@components/shared/MobileSidebar";
 import Header from "@/components/shared/Header";
-import DesktopSidebar from "@components/shared/SmartcashNav";
 // import { useAppSelector } from "@/redux/types";
 import { smartcash } from "@utils/routes";
 import { usePathname, useRouter } from "next/navigation";
@@ -15,16 +14,6 @@ const SmartcashLayout = ({ children }: { children: React.ReactNode }) => {
 
   const router = useRouter();
   const pathname = usePathname();
-
-  //   useEffect(() => {
-  //     if (
-  //       user &&
-  //       !user.role.includes("superadmin") &&
-  //       !user.role.includes("admin")
-  //     ) {
-  //       router.push("/dashboard");
-  //     }
-  //   }, []);
   const isTokenExpire = isTokenExpired("token");
   const token = getToken("token");
   const staff = getToken("staff");
