@@ -140,9 +140,7 @@ const LoginForm = () => {
                   <CustomButton type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <SpinnerTwo
-                        width="20"
-                        fill="white"
-                        className=" text-center !mx-auto !w-6 !h-6"
+                        className=" text-center !mx-auto size-5"
                       />
                     ) : (
                       " LOGIN"
