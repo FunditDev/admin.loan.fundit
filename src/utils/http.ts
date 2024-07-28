@@ -67,6 +67,7 @@ httpAuth?.interceptors.request.use(
         toast.error("Session expired, please login again", {
           toastId: "expired_session",
         });
+        window.location.href="/"
         // Router.push("/");
       }
     }

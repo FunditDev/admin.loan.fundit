@@ -167,7 +167,7 @@ const LoanWrapper = () => {
           ? "Loans Due This Month"
           : otherFilters.filter === "Matured"
           ? "Matured Loans"
-          : "Date Taken" &&
+          : otherFilters.filter === "Date Taken" &&
             ` Loans Taken between ${rangeTaken[0].toLocaleDateString()} and ${rangeTaken[1].toLocaleDateString()}`}
       </div>
       <div className="overflow-x-auto min-h-[400px]">
@@ -239,9 +239,9 @@ const LoanWrapper = () => {
                   </td>
                   <td className="text-center px-3 text-gray-700 border">
                     {loan.amountPaid
-                      ? (
+                      ? Math.abs(
                           parseFloat(formatAmount(loan.totalRepayment)) -
-                          loan.amountPaid
+                            loan.amountPaid
                         ).toLocaleString("en-NG", {
                           style: "currency",
                           currency: "NGN",

@@ -40,7 +40,7 @@ const LoanUpdatePage = ({ params }: { params: { slug: string } }) => {
   });
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-5xl">
       <h2 className="max-w-2xl mx-auto text-3xl sm:text-4xl font-medium text-gray-800 text-center">
         Loan Repayment schedule
       </h2>
