@@ -64,7 +64,6 @@ const IncomingUpdate = ({ slug, incomingUpdate }: Props) => {
         });
         mutate(`${Endpoints.getPendingUpdate}`);
       } catch (e: any) {
-        console.log("error -->", e);
         if (Array.isArray(e?.message)) {
           toast.error(e?.message[0] || "An error occured", {
             position: "top-right",
@@ -110,7 +109,6 @@ const IncomingUpdate = ({ slug, incomingUpdate }: Props) => {
       });
       mutate(`${Endpoints.getPendingUpdate}`);
     } catch (e: any) {
-      console.log("error -->", e);
       toast.error(e?.message || "An error occured", {
         position: "top-right",
         autoClose: 5000,

@@ -14,7 +14,6 @@ const SmartcashNav = () => {
   const router = useRouter();
 
   const { data, isLoading, error } = usePendingUpdate();
-  console.log(data?.length, "data -->");
   return (
     <nav className="flex flex-1 flex-col">
       <ul role="list" className="flex flex-1 flex-col gap-y-3">

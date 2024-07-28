@@ -43,7 +43,6 @@ const Page = ({
       }
     } catch (e) {
       setIsFetching(false);
-      console.log("error -->", e);
     }
   };
   const [staffDetails, setStaffDetails] = useState<StaffType>({
@@ -80,7 +79,6 @@ const Page = ({
     });
   }, [staffDetails]);
   const handleUpdate = async (data: StaffType) => {
-    console.log(data);
     const confirmSubmit = confirm(
       "Are you sure you want to update this staff?"
     );
@@ -104,7 +102,6 @@ const Page = ({
             updateType: "UPDATE",
           }
         );
-        console.log(res);
         toast.success("Update has been sent for Approval", {
           position: "top-right",
           autoClose: 5000,
@@ -115,7 +112,6 @@ const Page = ({
           progress: undefined,
         });
       } catch (e: any) {
-        console.log("error -->", e);
         if (Array.isArray(e.message)) {
           toast.error(e?.message[0] || "An error occured", {
             position: "top-right",
@@ -177,7 +173,6 @@ const Page = ({
           progress: undefined,
         });
       } catch (e: any) {
-        console.log("error -->", e);
         setIsUpdating(false);
         if (Array.isArray(e.message)) {
           toast.error(e?.message[0] || "An error occured", {
@@ -220,9 +215,7 @@ const Page = ({
             updateType: "DELETE",
           }
         );
-        console.log(res);
       } catch (e: any) {
-        console.log("error -->", e);
         toast.error(e?.message || "An error occured", {
           position: "top-right",
           autoClose: 5000,

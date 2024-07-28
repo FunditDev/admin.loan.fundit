@@ -14,7 +14,6 @@ const StaffWrapper = ({ staffs }: Props) => {
   const [offset, setOffset] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [filteredStaffs, setFilteredStaffs] = useState<Stafftype[]>(staffs);
-  console.log(filteredStaffs, "filteredStaffs -->", staffs);
   useEffect(() => {
     // if (staffs && staffs.length > 0) {
     //   setIsLoading(false);

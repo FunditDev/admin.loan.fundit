@@ -30,7 +30,6 @@ const DashboardPage = () => {
       return dashboardData?.data;
     } catch (err) {
       setIsLoading(false);
-      console.log(err);
     }
   };
   useEffect(() => {

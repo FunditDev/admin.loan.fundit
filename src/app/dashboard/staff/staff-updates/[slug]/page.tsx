@@ -50,7 +50,6 @@ const Page = ({
       }
     } catch (e) {
       setIsFetching(false);
-      console.log("error -->", e);
     }
   };
   const [staffDetails, setStaffDetails] = useState<StaffType>({
@@ -91,7 +90,6 @@ const Page = ({
       );
       return res?.data;
     } catch (error) {
-      console.log("error -->", error);
       return null;
     }
   };

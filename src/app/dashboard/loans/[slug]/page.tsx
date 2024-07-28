@@ -29,7 +29,7 @@ const LoanUpdatePage = ({ params }: { params: { slug: string } }) => {
     loanId: params.slug,
     staffId: staffId!,
   });
-  console.log(data, "loan");
+  // console.log(data, "loan");
   const {
     register,
     formState: { errors, isSubmitting },

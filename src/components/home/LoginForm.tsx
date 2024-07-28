@@ -53,7 +53,6 @@ const LoginForm = () => {
     // router.push("/dashboard");
     try {
       const rs = await processNoAuth("post", Endpoints.loginAdmin, data);
-      console.log("rs -->", rs);
       if (rs?.data) {
         toast.success("Login Successful", {
           toastId: "success",
@@ -66,11 +65,9 @@ const LoginForm = () => {
         // router.push("/dashboard");
       }
     } catch (err: any) {
-      console.log(err, "error");
       if (err.status === 401) {
         alert("Invalid Staff Id");
       } else {
-        console.log(err, "error");
         toast.error(err.message, {
           toastId: "error",
           autoClose: 4000,

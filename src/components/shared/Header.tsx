@@ -28,7 +28,6 @@ const Header = ({ setSidebarOpen }: Props) => {
       // dispatch(logOutUser());
       // await logoutAction();
     } catch (error: any) {
-      console.log(error, "res");
       toast.error(error?.response?.data.message);
     } finally {
       toast.success("Logout Successful");

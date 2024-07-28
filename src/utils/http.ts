@@ -187,12 +187,11 @@ export const processNoAuth = async (
       return { data: rt.data, status: rt.status };
     }
   } catch (error: any) {
-    console.log(error, "error from rt no auth");
+    console.log(error);
 
     if (callback) {
       callback(path, null, error);
     } else {
-      console.log("error from rt no auth");
       throw error.response ? error.response.data : error;
     }
   }

@@ -38,7 +38,6 @@ const AddStaffPage = () => {
           earnings: parseFloat(data.earnings.replace(/,/g, "")),
           bankAccount: data.bankAccount,
         });
-        console.log(res, "res -->");
         if (res) {
           toast.success("Staff Added Successfully", {
             position: "top-right",
