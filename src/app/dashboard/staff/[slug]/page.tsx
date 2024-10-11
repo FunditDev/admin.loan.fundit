@@ -112,8 +112,8 @@ const Page = ({
           progress: undefined,
         });
       } catch (e: any) {
-        if (Array.isArray(e.message)) {
-          toast.error(e?.message[0] || "An error occured", {
+        if (Array.isArray(e.error)) {
+          toast.error(e?.error[0] || "An error occured", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -123,7 +123,7 @@ const Page = ({
             progress: undefined,
           });
         }
-        toast.error(e?.message || "An error occured", {
+        toast.error(e?.error || "An error occured", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -174,8 +174,8 @@ const Page = ({
         });
       } catch (e: any) {
         setIsUpdating(false);
-        if (Array.isArray(e.message)) {
-          toast.error(e?.message[0] || "An error occured", {
+        if (Array.isArray(e.error)) {
+          toast.error(e?.error[0] || "An error occured", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -185,7 +185,7 @@ const Page = ({
             progress: undefined,
           });
         }
-        toast.error(e?.message || "An error occured", {
+        toast.error(e?.error || "An error occured", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,

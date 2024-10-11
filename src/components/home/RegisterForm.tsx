@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useEffect } from "react";
 import CustomInput from "../forms/CustomInput";
-import { LoginType } from "@utils/types";
+import { LoginType, Registertype } from "@utils/types";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 // import { useAppDispatch, useAppSelector } from "@/redux/reduxType";
@@ -23,14 +23,29 @@ import { setToken } from "@/utils/token";
 const schema = yup.object().shape({
   staffId: yup.string().trim().required("Staff Id is required"),
   password: yup.string().trim().required("Password is required"),
+  staffEmail: yup
+    .string()
+    .trim()
+    .required("Email is required")
+    .test(
+      "have airtel email",
+      "Email must be airtel email or smartcash",
+      (value) => {
+        return (
+          value?.includes("@ng.airtel.com") || value.includes("smartcashpsb.ng")
+        );
+      }
+    ),
+  firstName: yup.string().trim().required("First Name is required"),
+  lastName: yup.string().trim().required("Last Name is required"),
 });
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
-  } = useForm<LoginType>({
+  } = useForm<Registertype>({
     resolver: yupResolver(schema),
     defaultValues: {
       staffId: "",
@@ -49,17 +64,17 @@ const LoginForm = () => {
   //       localStorage.removeItem("token");
   //     }
   //   }, []);
-  const handleLoginSumbit = async (data: LoginType) => {
+  const handleRegister = async (data: LoginType) => {
     // router.push("/dashboard");
     try {
-      const rs = await processNoAuth("post", Endpoints.loginAdmin, data);
+      const rs = await processNoAuth("post", Endpoints.registerAdmin, data);
       if (rs?.data) {
-        toast.success("Login Successful", {
+        toast.success("Success", {
           toastId: "success",
           position: "top-right",
         });
-        setToken("token", rs.data.token);
-        setToken("staff", JSON.stringify(rs.data.staff));
+        // setToken("token", rs.data.token);
+        // setToken("staff", JSON.stringify(rs.data.staff));
 
         router.push("/dashboard");
         // router.push("/dashboard");
@@ -68,7 +83,7 @@ const LoginForm = () => {
       if (err.status === 401) {
         alert("Invalid Staff Id");
       } else {
-        toast.error(err.error, {
+        toast.error(err.message, {
           toastId: "error",
           autoClose: 4000,
           pauseOnHover: true,
@@ -88,8 +103,44 @@ const LoginForm = () => {
             </div>
             <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl "></h2>
 
-            <form className="mt-8" onSubmit={handleSubmit(handleLoginSumbit)}>
-              <div className="space-y-5">
+            <form className="mt-8" onSubmit={handleSubmit(handleRegister)}>
+              <div className="space-y-3">
+                <div>
+                  <CustomInput
+                    type="text"
+                    label="FirstName"
+                    required
+                    name="firstName"
+                    register={register}
+                    errors={errors.firstName?.message}
+                    placeholder="Enter your First Name"
+                    errorClassName="text-red-700"
+                  />
+                </div>
+                <div>
+                  <CustomInput
+                    type="text"
+                    label="LastName"
+                    required
+                    name="lastName"
+                    register={register}
+                    errors={errors.lastName?.message}
+                    placeholder="Enter your Last Name"
+                    errorClassName="text-red-700"
+                  />
+                </div>
+                <div>
+                  <CustomInput
+                    type="text"
+                    label="Email"
+                    required
+                    name="staffEmail"
+                    register={register}
+                    errors={errors.staffEmail?.message}
+                    placeholder="Enter your Staff Email"
+                    errorClassName="text-red-700"
+                  />
+                </div>
                 <div>
                   <CustomInput
                     type="text"
@@ -99,6 +150,7 @@ const LoginForm = () => {
                     register={register}
                     errors={errors.staffId?.message}
                     placeholder="Enter your Staff Id"
+                    errorClassName="text-red-700"
                   />
                 </div>
                 <CustomInput
@@ -109,38 +161,15 @@ const LoginForm = () => {
                   register={register}
                   errors={errors.password?.message}
                   placeholder="Enter your Password"
+                  errorClassName="text-red-700"
                 />
-
-                {/* <div>
-                  <CustomInput
-                    type="password"
-                    name="password"
-                    register={register}
-                    label="Password"
-                    errors={errors.password?.message}
-                    placeholder="Enter your password"
-                    required
-                  />
-                  <div className="flex items-center justify-between mt-2.5">
-                    <Link
-                      href="#"
-                      title=""
-                      className="text-sm font-medium text-blue-600 hover:underline hover:text-blue-700 focus:text-blue-700"
-                    >
-                      {" "}
-                      Forgot password?{" "}
-                    </Link>
-                  </div>
-                </div> */}
 
                 <div>
                   <CustomButton type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
-                      <SpinnerTwo
-                        className=" text-center !mx-auto size-5"
-                      />
+                      <SpinnerTwo className=" text-center !mx-auto size-5" />
                     ) : (
-                      " LOGIN"
+                      " Register"
                     )}
                   </CustomButton>
                 </div>
@@ -159,33 +188,11 @@ const LoginForm = () => {
               src={image1}
               alt=""
             />
-            {/* <Image
-              className="w-sm mx-auto h-auto -rotate-6"
-              src={image2}
-              alt=""
-            /> */}
 
             <p className="text-sm text-center font-bold text-[#1d0469]">
               <span className="text-gray-800">Powered by:</span> FUNDiT Finance
               Company Limited
             </p>
-            {/* <div className="w-full max-w-md mx-auto xl:max-w-xl">
-              <h3 className="text-2xl font-bold text-center text-black">
-                Design your own card
-              </h3>
-              <p className="leading-relaxed text-center text-gray-500 mt-2.5">
-                Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-                amet sint. Velit officia consequat duis.
-              </p>
-
-              <div className="flex items-center justify-center mt-10 space-x-3">
-                <div className="bg-orange-500 rounded-full w-20 h-1.5"></div>
-
-                <div className="bg-gray-200 rounded-full w-12 h-1.5"></div>
-
-                <div className="bg-gray-200 rounded-full w-12 h-1.5"></div>
-              </div>  
-                    </div> */}
           </div>
         </div>
       </div>
@@ -193,4 +200,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

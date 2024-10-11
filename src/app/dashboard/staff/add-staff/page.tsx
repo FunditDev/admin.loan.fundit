@@ -25,7 +25,9 @@ const AddStaffPage = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<AddStaffType>();
+  } = useForm<AddStaffType>({
+    defaultValues:{bankName:"SmartCash"}
+  });
   const router = useRouter();
   const handleStaffAdd = async (data: AddStaffType) => {
     const confirmSubmit = confirm(
@@ -46,13 +48,14 @@ const AddStaffPage = () => {
           router.push("/dashboard/staff");
         }
       } catch (e: any) {
-        if (Array.isArray(e.message)) {
-          // e.message.forEach((err) => {
+        console.log(e,'hdhdjd')
+        if (Array.isArray(e.error)) {
+          // e.error.forEach((err) => {
           //   toast.error(err);
           // });
-          toast.error(e.message[0]);
+          toast.error(e.error[0]);
         } else {
-          toast.error(e.message);
+          toast.error(e.error);
         }
       }
     } else {
@@ -125,6 +128,7 @@ const AddStaffPage = () => {
               <CustomInput
                 name="bankName"
                 type="text"
+                disabled
                 register={register}
                 placeholder="Enter Bank Name"
                 label="Bank Name "

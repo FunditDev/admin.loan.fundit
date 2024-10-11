@@ -2,6 +2,13 @@ export interface LoginType {
   staffId: string;
   password: string;
 }
+export interface Registertype {
+  staffId: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  staffEmail: string;
+}
 
 export type tokenType = "token" | "refreshToken"| "staff";
 export type LoansType = {

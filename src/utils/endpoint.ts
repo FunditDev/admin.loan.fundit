@@ -1,7 +1,9 @@
+import { register } from "module";
 import { get } from "node_modules/axios/index.cjs";
 
 export const Endpoints = {
   loginAdmin: "/v2/smartcash/adminLogin",
+  registerAdmin: "/v2/smartcash/registerAdmin",
   getAllStaffLoans: "/v2/smartcash/getAllStaffLoans",
   getStaffLoans: "/v2/smartcash/getStaffLoans",
   getAllStaff: "/v2/smartcash/getAllStaff",
