@@ -88,7 +88,7 @@ const AuthContainer = () => {
                 </CustomButton>
                 <div className=" flex justify-between  items-center text-white mt-5 w-full">
                   <div className="flex gap-2  items-center text-white">
-                    <p>Don't have an account ?</p>
+                    <p>Don&apos;t have an account ?</p>
                     <Link
                       href="/register"
                       className="text-sm hover:underline duration-300 transition-all text-center text-yellow-200"

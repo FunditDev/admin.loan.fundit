@@ -46,7 +46,7 @@ const ResendVerification = ({ staffId }: Props) => {
         <div className="w-full max-w-sm xl:w-full xl:max-w-md 2xl:max-w-md xl:mx-auto">
           <div className="self- mb-20">
             <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl text-center">
-              Verify It's You
+              Verify It&apos;s You
             </h2>
             <div className="mt-8">
               <p className="text-white mb-6">
