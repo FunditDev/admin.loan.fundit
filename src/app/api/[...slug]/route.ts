@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 //     : "http://localhost:3800";
 const url =
   process.env.NODE_ENV === "production"
-    ? "https://api.fundit.com.ng/api"
+    ? "https://api.fundit.com.ng"
     : "http://localhost:3800";
 export async function GET(
   request: Request,
