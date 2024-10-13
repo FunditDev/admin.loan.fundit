@@ -6,7 +6,7 @@ import { Endpoints } from "@/utils/endpoint";
 import { SpinnerTwo } from "@/components/icons/Spinner";
 import { toast } from "react-toastify";
 
-const page = () => {
+const AccountVerificationPage = () => {
   const params = useSearchParams();
   const router = useRouter();
   console.log("params -->", params.get("token"));
@@ -57,4 +57,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AccountVerificationPage;
