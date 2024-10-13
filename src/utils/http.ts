@@ -9,8 +9,7 @@ let httpNoAuth;
 let refreshToking = false;
 const baseURL =
   process.env.NODE_ENV === "production"
-    ? "https://admin.smartcash.fundit.com.ng/api" ||
-      "https://www.admin.smartcash.fundit.com.ng/api"
+    ? "https://www.admin.smartcash.fundit.com.ng/api"
     : "http://localhost:3300/api";
 
 if (typeof window !== undefined) {
@@ -67,7 +66,7 @@ httpAuth?.interceptors.request.use(
         toast.error("Session expired, please login again", {
           toastId: "expired_session",
         });
-        window.location.href="/"
+        window.location.href = "/";
         // Router.push("/");
       }
     }
