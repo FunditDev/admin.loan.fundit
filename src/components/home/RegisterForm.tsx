@@ -64,7 +64,7 @@ const RegisterForm = () => {
   //       localStorage.removeItem("token");
   //     }
   //   }, []);
-  const handleRegister = async (data: LoginType) => {
+  const handleRegister = async (data: Registertype) => {
     // router.push("/dashboard");
     try {
       const rs = await processNoAuth("post", Endpoints.registerAdmin, data);
@@ -76,21 +76,16 @@ const RegisterForm = () => {
         // setToken("token", rs.data.token);
         // setToken("staff", JSON.stringify(rs.data.staff));
 
-        router.push("/dashboard");
-        // router.push("/dashboard");
+        router.push("/");
       }
     } catch (err: any) {
-      if (err.status === 401) {
-        alert("Invalid Staff Id");
-      } else {
-        toast.error(err.message, {
-          toastId: "error",
-          autoClose: 4000,
-          pauseOnHover: true,
-          className: "bg-red-500 text-white font-bold ",
-          position: "top-right",
-        });
-      }
+      toast.error(err.error, {
+        toastId: "error",
+        autoClose: 4000,
+        pauseOnHover: true,
+        className: "bg-red-500 text-white font-bold ",
+        position: "top-right",
+      });
     }
   };
   return (
@@ -104,7 +99,7 @@ const RegisterForm = () => {
             <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl "></h2>
 
             <form className="mt-8" onSubmit={handleSubmit(handleRegister)}>
-              <div className="space-y-3">
+              <div className="space-y-3 flex flex-col">
                 <div>
                   <CustomInput
                     type="text"
@@ -164,7 +159,7 @@ const RegisterForm = () => {
                   errorClassName="text-red-700"
                 />
 
-                <div>
+                <div className="pt-5">
                   <CustomButton type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <SpinnerTwo className=" text-center !mx-auto size-5" />
@@ -172,6 +167,15 @@ const RegisterForm = () => {
                       " Register"
                     )}
                   </CustomButton>
+                </div>
+                <div className=" flex gap-2  items-center text-white">
+                  <p>Already have an account ?</p>
+                  <Link
+                    href="/"
+                    className="text-sm hover:underline duration-300 transition-all text-center text-yellow-200"
+                  >
+                    Login
+                  </Link>
                 </div>
               </div>
             </form>

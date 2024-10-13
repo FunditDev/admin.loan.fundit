@@ -1,5 +1,6 @@
 "use client";
 import { SpinnerTwo } from "@/components/icons/Spinner";
+import { Endpoints } from "@/utils/endpoint";
 import { processWithAuth } from "@/utils/http";
 import {
   ArrowRightIcon,
@@ -23,7 +24,7 @@ const DashboardPage = () => {
     try {
       const dashboardData = await processWithAuth(
         "get",
-        "/v2/smartcash/getDashboardData"
+        Endpoints.getDashboardData
       );
       setIsLoading(false);
       setDashboardData(dashboardData?.data);

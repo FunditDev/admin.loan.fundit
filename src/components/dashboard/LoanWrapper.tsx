@@ -282,7 +282,7 @@ const LoanWrapper = () => {
           renderOnZeroPageCount={null}
           pageRangeDisplayed={5}
           className="flex justify-center items-center space-x-3"
-          activeClassName="bg-gray-500 text-white"
+          activeClassName="bg-gray-500 text-white "
           previousClassName="text-sm font-medium text-gray-900 bg-gray-200 px-3 py-2 rounded-md"
           nextClassName="text-sm font-medium text-gray-900 bg-gray-200 px-3 py-2 rounded-md"
           pageClassName="text-sm font-medium text-gray-900 bg-gray-200 px-3 py-2 rounded-md"

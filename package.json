@@ -16,6 +16,7 @@
     "@types/react-paginate": "^7.1.4",
     "axios": "^1.6.7",
     "file-saver": "^2.0.5",
+    "framer-motion": "^11.11.8",
     "next": "14.0.2",
     "react": "^18",
     "react-datepicker": "^7.3.0",
