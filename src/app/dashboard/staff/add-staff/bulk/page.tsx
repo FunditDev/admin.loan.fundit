@@ -43,33 +43,39 @@ const BulkUpload = () => {
   };
   const handleUpload = async () => {
     let stoppedNumber = 0;
+    let retry = true;
     // let startNumber = 0;
-    for (let i = startNumber; i < parsedData.length; i++) {
-      try {
-        //   if (i > 2) {
-        //     return;
-        //   }
-        const staff = parsedData[i];
+    while (retry) {
+        retry = false;
+      for (let i = startNumber; i < parsedData.length; i++) {
+        try {
+          //   if (i > 2) {
+          //     return;
+          //   }
+          const staff = parsedData[i];
 
-        const res = await processWithAuth("post", Endpoints.addNewStaff, {
-          staffId: staff.EMPLOYEE_NUMBER.toString(),
-          firstName: staff.First_Name,
-          lastName: staff.Last_Name,
-          staffEmail: staff.EMAIL_ADDRESS,
-          earnings: staff.Monthly_Payment_to_Smartcash,
-          bvn: staff.BVN.toString(),
-          bankAccount: staff.ACCOUNT_NO.toString(),
-          legalEmployer: staff.Legal_Employer,
-          bankName: "Smartcash Wallet",
-        });
-        console.log(res, "res -->");
-      } catch (error: any) {
-        if (error) {
-          stoppedNumber = i;
-          setStartNumber(i + 1);
-          handleUpload();
-          console.log(`start at ${startNumber} and stopped at ${stoppedNumber}`);
-          break;
+          const res = await processWithAuth("post", Endpoints.addNewStaff, {
+            staffId: staff.EMPLOYEE_NUMBER.toString(),
+            firstName: staff.First_Name,
+            lastName: staff.Last_Name,
+            staffEmail: staff.EMAIL_ADDRESS,
+            earnings: staff.Monthly_Payment_to_Smartcash,
+            bvn: staff.BVN.toString(),
+            bankAccount: staff.ACCOUNT_NO.toString(),
+            legalEmployer: staff.Legal_Employer,
+            bankName: "Smartcash Wallet",
+          });
+          console.log(res, "res -->");
+        } catch (error: any) {
+          if (error) {
+            stoppedNumber = i;
+            setStartNumber(i + 1);
+            retry = true;
+            console.log(
+              `start at ${startNumber} and stopped at ${stoppedNumber}`
+            );
+            break;
+          }
         }
       }
     }
