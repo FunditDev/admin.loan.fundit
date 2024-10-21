@@ -17,14 +17,14 @@ const BulkUpload = () => {
   const [parsedData, setParsedData] = React.useState<any[]>([]);
 
   // Function to upload a single row of data to the server
-  const handleFileUpload = (e) => {
+  const handleFileUpload = (e: any) => {
     const file = e.target.files[0]; // Get the uploaded file
 
     if (file) {
       const reader = new FileReader();
 
-      reader.onload = function (event) {
-        const data = new Uint8Array(event.target.result); // Read file data as an array buffer
+      reader.onload = function (event: any) {
+        const data = new Uint8Array(event?.target.result as any); // Read file data as an array buffer
         const workbook = XLSX.read(data, { type: "array" }); // Parse the Excel file
 
         // Assuming you're reading the first sheet:
@@ -41,9 +41,9 @@ const BulkUpload = () => {
   };
   const handleUpload = async () => {
     for (let i = 0; i < parsedData.length; i++) {
-    //   if (i > 2) {
-    //     return;
-    //   }
+      //   if (i > 2) {
+      //     return;
+      //   }
       const staff = parsedData[i];
       const res = await processWithAuth("post", Endpoints.addNewStaff, {
         staffId: staff.EMPLOYEE_NUMBER.toString(),
@@ -54,8 +54,7 @@ const BulkUpload = () => {
         bvn: staff.BVN.toString(),
         bankAccount: staff.ACCOUNT_NO.toString(),
         legalEmployer: staff.Legal_Employer,
-        bankName:'Smartcash Wallet'
-
+        bankName: "Smartcash Wallet",
       });
       console.log(res, "res -->");
     }
