@@ -3,6 +3,7 @@ import { Endpoints } from "@/utils/endpoint";
 import { processWithAuth } from "@/utils/http";
 import path from "path";
 import React from "react";
+import { start } from "repl";
 import * as XLSX from "xlsx";
 
 const BulkUpload = () => {
@@ -40,41 +41,37 @@ const BulkUpload = () => {
     }
   };
   const handleUpload = async () => {
-    for (let i = 0; i < parsedData.length; i++) {
-      //   if (i > 2) {
-      //     return;
-      //   }
-      const staff = parsedData[i];
-      const res = await processWithAuth("post", Endpoints.addNewStaff, {
-        staffId: staff.EMPLOYEE_NUMBER.toString(),
-        firstName: staff.First_Name,
-        lastName: staff.Last_Name,
-        staffEmail: staff.EMAIL_ADDRESS,
-        earnings: staff.Monthly_Payment_to_Smartcash,
-        bvn: staff.BVN.toString(),
-        bankAccount: staff.ACCOUNT_NO.toString(),
-        legalEmployer: staff.Legal_Employer,
-        bankName: "Smartcash Wallet",
-      });
-      console.log(res, "res -->");
+    let stoppedNumber = 0;
+    let startNumber = 0;
+    for (let i = startNumber; i < parsedData.length; i++) {
+      try {
+        //   if (i > 2) {
+        //     return;
+        //   }
+        const staff = parsedData[i];
+
+        const res = await processWithAuth("post", Endpoints.addNewStaff, {
+          staffId: staff.EMPLOYEE_NUMBER.toString(),
+          firstName: staff.First_Name,
+          lastName: staff.Last_Name,
+          staffEmail: staff.EMAIL_ADDRESS,
+          earnings: staff.Monthly_Payment_to_Smartcash,
+          bvn: staff.BVN.toString(),
+          bankAccount: staff.ACCOUNT_NO.toString(),
+          legalEmployer: staff.Legal_Employer,
+          bankName: "Smartcash Wallet",
+        });
+        console.log(res, "res -->");
+      } catch (error: any) {
+        if (error) {
+          stoppedNumber = i;
+          startNumber = i + 1;
+          handleUpload();
+          console.log(`Stopped at ${stoppedNumber}`);
+          break;
+        }
+      }
     }
-    // for (const staff of parsedData) {
-    //   const res = await processWithAuth("post", Endpoints.bulkUploadStaff, {
-    //     staffId: staff.EMPLOYEE_NUMBER,
-    //     firstName: staff.First_Name,
-    //     lastName: staff.Last_Name,
-    //     email: staff.EMAIL_ADDRESS,
-    //     earnings: staff.Monthly_Payment_to_Smartcash,
-    //     bvn: staff.BVN,
-    //     bankAccount: staff.ACCOUNT_NO,
-    //     legalEmployer: staff.Legal_Employer,
-    //   });
-    //   return {
-    //     status: res.status,
-    //     data: res.data,
-    //   };
-    //   console.log(res, "res -->");
-    // }
   };
 
   console.log(parsedData, "parsedData -->");
@@ -86,7 +83,7 @@ const BulkUpload = () => {
         id="upload sc file"
         onChange={handleFileUpload}
       />
-      <button onClick={handleUpload}>Upload</button>
+      <button onClick={() => handleUpload()}>Upload</button>
     </div>
   );
 };
