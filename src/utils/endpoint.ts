@@ -21,6 +21,7 @@ export const Endpoints = {
   getDashboardData: "/v2/smartcash/admin/getDashboardData",
   getSingleStaffLoanById: "/v2/smartcash/getSingleStaffLoan",
   addNewStaff:"/v2/smartcash/admin/add-staff",
+  bulkUploadStaff: "/v2/smartcash/admin/bulkUploadStaff",
   getPendingUpdate: "/v2/smartcash/admin/getPendingUpdate",
   logout: "/v2/smartcash/logout",
 

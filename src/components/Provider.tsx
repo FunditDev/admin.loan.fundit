@@ -12,6 +12,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
         pauseOnFocusLoss={false}
         pauseOnHover={false}
         position="bottom-left"
+        className={'text-sm font-normal'}
       />
     </div>
   );

@@ -151,7 +151,7 @@ const StaffWrapper = ({ staffs }: Props) => {
           pageClassName="text-sm font-medium text-gray-900 bg-gray-200 px-3 py-2 rounded-md"
         />
         <p>
-          Showing {offset + 1} - {endOffset} of {filteredStaffs.length} loans
+          Showing {offset + 1} - {endOffset} of {filteredStaffs.length} Staff
         </p>
       </div>
     </div>

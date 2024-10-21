@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
-module.exports = nextConfig
+const nextConfig = {};
+
+module.exports = nextConfig;

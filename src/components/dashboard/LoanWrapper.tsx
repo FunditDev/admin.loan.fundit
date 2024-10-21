@@ -188,6 +188,13 @@ const LoanWrapper = () => {
             </tr>
           </thead>
           <tbody className="h-fit">
+            {!currentLoans.length && !isLoadingSearch && (
+              <tr className="*:px-2 *:py-2 *:border *:text-center *:text-sm">
+                <td colSpan={10} className="text-center">
+                  No loans found
+                </td>
+              </tr>
+            )}
             {isLoadingSearch &&
               Array.from({ length: itemsPerPage }).map((_, index) => (
                 <tr
