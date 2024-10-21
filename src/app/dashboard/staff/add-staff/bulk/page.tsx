@@ -41,36 +41,34 @@ const BulkUpload = () => {
       reader.readAsArrayBuffer(file); // Read the file as an array buffer
     }
   };
-  const handleUpload = async () => {
-let stoppedNumber = 0;
-      for (let i = 0; i < parsedData.length; i++) {
-        try {
-          //   if (i > 2) {
-          //     return;
-          //   }
-          const staff = parsedData[i];
 
-          const res = await processWithAuth("post", Endpoints.addNewStaff, {
-            staffId: staff.EMPLOYEE_NUMBER.toString(),
-            firstName: staff.First_Name,
-            lastName: staff.Last_Name,
-            staffEmail: staff.EMAIL_ADDRESS,
-            earnings: staff.Monthly_Payment_to_Smartcash,
-            bvn: staff.BVN.toString(),
-            bankAccount: staff.ACCOUNT_NO.toString(),
-            legalEmployer: staff.Legal_Employer,
-            bankName: "Smartcash Wallet",
-          });
-          console.log(res, "res -->");
-        } catch (error: any) {
-            console.log(error, "error -->");
-          if (error) {
-            stoppedNumber = i;
-            console.log(
-              `stopped at ${stoppedNumber}`
-            );
-            break;
-          }
+  const handleUpload = async () => {
+    let stoppedNumber = 0;
+    for (let i = 0; i < parsedData.length; i++) {
+      try {
+        //   if (i > 2) {
+        //     return;
+        //   }
+        const staff = parsedData[i];
+
+        const res = await processWithAuth("post", Endpoints.addNewStaff, {
+          staffId: staff.EMPLOYEE_NUMBER.toString(),
+          firstName: staff.First_Name,
+          lastName: staff.Last_Name,
+          staffEmail: staff.EMAIL_ADDRESS,
+          earnings: staff.Monthly_Payment_to_Smartcash,
+          bvn: staff.BVN.toString(),
+          bankAccount: staff.ACCOUNT_NO.toString(),
+          legalEmployer: staff.Legal_Employer,
+          bankName: "Smartcash Wallet",
+        });
+        console.log(res, "res -->");
+      } catch (error: any) {
+        console.log(error, "error -->");
+        if (error) {
+          stoppedNumber = i;
+          console.log(`stopped at ${stoppedNumber}`);
+          break;
         }
       }
     }
