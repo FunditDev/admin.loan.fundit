@@ -18,7 +18,8 @@ type AddStaffType = {
   staffId: string;
   bankAccount: string;
   bankName: string;
-  //   bvn: string;
+  bvn: string;
+  legalEmployer: string;
 };
 const AddStaffPage = () => {
   const {
@@ -26,7 +27,7 @@ const AddStaffPage = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<AddStaffType>({
-    defaultValues:{bankName:"SmartCash"}
+    defaultValues: { bankName: "SmartCash" },
   });
   const router = useRouter();
   const handleStaffAdd = async (data: AddStaffType) => {
@@ -48,7 +49,7 @@ const AddStaffPage = () => {
           router.push("/dashboard/staff");
         }
       } catch (e: any) {
-        console.log(e,'hdhdjd')
+        console.log(e, "hdhdjd");
         if (Array.isArray(e.error)) {
           // e.error.forEach((err) => {
           //   toast.error(err);
@@ -135,15 +136,24 @@ const AddStaffPage = () => {
                 outerClassName="w-full"
               />
             </div>
-            {/* <CustomInput
+            <div className="flex max-md:flex-col gap-6">
+              <CustomInput
                 name="bvn"
                 type="text"
                 register={register}
                 placeholder="Enter BVN"
                 label="BVN"
                 outerClassName="w-full"
-
-              /> */}
+              />
+              <CustomInput
+                name="legalEmployer"
+                type="text"
+                register={register}
+                placeholder="Enter Legal Employer"
+                label="Legal Employer"
+                outerClassName="w-full"
+              />
+            </div>
             <div className="mx-auto">
               <CustomButton
                 type="submit"
