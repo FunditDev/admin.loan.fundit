@@ -7,10 +7,10 @@ import * as XLSX from "xlsx";
 
 const BulkUpload = () => {
   const parseExcel = (filePath: string) => {
-    const workbook = XlSX.readFile(filePath);
+    const workbook = XLSX.readFile(filePath);
     const sheetNames = workbook.SheetNames;
 
-    const parsedData = XlSX.utils.sheet_to_json(workbook.Sheets[sheetNames[0]]); // Parse the first sheet
+    const parsedData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[0]]); // Parse the first sheet
     return parsedData;
   };
 
