@@ -16,6 +16,7 @@ const BulkUpload = () => {
   };
 
   const [parsedData, setParsedData] = React.useState<any[]>([]);
+  const [startNumber, setStartNumber] = React.useState(0);
 
   // Function to upload a single row of data to the server
   const handleFileUpload = (e: any) => {
@@ -42,7 +43,7 @@ const BulkUpload = () => {
   };
   const handleUpload = async () => {
     let stoppedNumber = 0;
-    let startNumber = 0;
+    // let startNumber = 0;
     for (let i = startNumber; i < parsedData.length; i++) {
       try {
         //   if (i > 2) {
@@ -65,9 +66,9 @@ const BulkUpload = () => {
       } catch (error: any) {
         if (error) {
           stoppedNumber = i;
-          startNumber = i + 1;
+          setStartNumber(i + 1);
           handleUpload();
-          console.log(`Stopped at ${stoppedNumber}`);
+          console.log(`start at ${startNumber} and stopped at ${stoppedNumber}`);
           break;
         }
       }
