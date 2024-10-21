@@ -42,12 +42,8 @@ const BulkUpload = () => {
     }
   };
   const handleUpload = async () => {
-    let stoppedNumber = 0;
-    let retry = true;
-    // let startNumber = 0;
-    while (retry) {
-        retry = false;
-      for (let i = startNumber; i < parsedData.length; i++) {
+let stoppedNumber = 0;
+      for (let i = 0; i < parsedData.length; i++) {
         try {
           //   if (i > 2) {
           //     return;
@@ -67,12 +63,11 @@ const BulkUpload = () => {
           });
           console.log(res, "res -->");
         } catch (error: any) {
+            console.log(error, "error -->");
           if (error) {
             stoppedNumber = i;
-            setStartNumber(i + 1);
-            retry = true;
             console.log(
-              `start at ${startNumber} and stopped at ${stoppedNumber}`
+              `stopped at ${stoppedNumber}`
             );
             break;
           }
@@ -81,7 +76,6 @@ const BulkUpload = () => {
     }
   };
 
-  console.log(parsedData, "parsedData -->");
   return (
     <div>
       <input
