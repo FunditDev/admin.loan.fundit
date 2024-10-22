@@ -44,6 +44,7 @@ const BulkUpload = () => {
 
   const handleUpload = async () => {
     let stoppedNumber = 0;
+    return
     for (let i = 0; i < parsedData.length; i++) {
       try {
         //   if (i > 2) {

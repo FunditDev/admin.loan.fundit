@@ -22,8 +22,8 @@ const LargeSidebar = ({ pathname, type = "dashboard" }: Props) => {
             <Link href={"/dashboard"}>
               <Image
                 className="h-8 w-auto"
-                src="/smartcash-logo.svg"
-                alt="Your Company"
+                src="/logo.png"
+                alt="Fundit Logo"
                 width={32}
                 height={32}
               />

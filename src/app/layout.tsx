@@ -6,8 +6,8 @@ import Provider from "@/components/Provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Smartcash Admin",
-  description: "Smartcash Admin for managing Staff Loans and transactions",
+  title: "Fundit Staff Loann ",
+  description: "Fundit Admin Staff portal for managing Staff Loans and transactions",
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/smartcash-logo.svg" type="image/x-icon" />
+        <link rel="icon" href="/logo.png" type="image/x-icon" />
       </head>
       <body>
         <Provider>

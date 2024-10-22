@@ -21,7 +21,8 @@ const LoginForm = ({}: Props) => {
     <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 w-full">
       <div className="w-full max-w-sm xl:w-full xl:max-w-md 2xl:max-w-md xl:mx-auto">
         <div className="self- mb-20">
-          <Image className="w-sm h-auto" src={smartcash} alt="" />
+          <h2 className="text-white text-5xl font-semibold text-center"> Login</h2>
+          {/* <Image className="w-sm h-auto" src={smartcash} alt="" /> */}
         </div>
         <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl "></h2>
 

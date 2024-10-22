@@ -2,7 +2,7 @@
 import CustomAmountInput from "@/components/forms/CustomAmountInput";
 import CustomButton from "@/components/forms/CustomButton";
 import CustomInput from "@/components/forms/CustomInput";
-import Spinner, { SpinnerTwo } from "@/components/icons/Spinner";
+import { SpinnerTwo } from "@/components/icons/Spinner";
 import { processWithAuth } from "@/utils/http";
 import { Endpoints } from "@/utils/endpoint";
 import { useRouter } from "next/navigation";

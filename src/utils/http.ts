@@ -9,7 +9,7 @@ let httpNoAuth;
 let refreshToking = false;
 const baseURL =
   process.env.NODE_ENV === "production"
-    ? "https://www.admin.smartcash.fundit.com.ng/api"
+    ? "https://www.admin.loan.fundit.com.ng/api"
     : "http://localhost:3300/api";
 
 if (typeof window !== undefined) {
