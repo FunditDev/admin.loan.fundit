@@ -250,7 +250,7 @@ const Page = ({
             placeholder="Staff First Name"
             name="firstName"
             type="text"
-            errors={errors.firstName?.message}
+            error={errors.firstName?.message}
             label="Staff First Name"
             disabled
           />
@@ -259,7 +259,7 @@ const Page = ({
             placeholder="Staff Last Name"
             name="lastName"
             type="text"
-            errors={errors.lastName?.message}
+            error={errors.lastName?.message}
             label="Staff Last Name"
           />
 
@@ -274,7 +274,7 @@ const Page = ({
             register={register}
             placeholder="Email"
             name="staffEmail"
-            errors={errors.staffEmail?.message}
+            error={errors.staffEmail?.message}
             label="Staff Email"
             type="email"
             disabled

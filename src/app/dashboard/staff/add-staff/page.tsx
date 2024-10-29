@@ -79,7 +79,7 @@ const AddStaffPage = () => {
                 register={register}
                 placeholder="Enter First Name"
                 label="First Name"
-                outerClassName="w-full"
+                // outerClass="w-full"
               />
               <CustomInput
                 name="lastName"
@@ -87,7 +87,6 @@ const AddStaffPage = () => {
                 register={register}
                 placeholder="Enter Last Name"
                 label="Last Name"
-                outerClassName="w-full"
               />
             </div>
             <div className="flex max-md:flex-col gap-6">
@@ -97,7 +96,6 @@ const AddStaffPage = () => {
                 register={register}
                 placeholder="Enter Staff Id"
                 label="Staff Id"
-                outerClassName="w-full"
               />
               <CustomAmountInput
                 {...register("earnings")}
@@ -115,7 +113,6 @@ const AddStaffPage = () => {
               name="staffEmail"
               label="Email"
               type="email"
-              outerClassName="w-full"
             />
             <div className="flex max-md:flex-col gap-6">
               <CustomInput
@@ -124,7 +121,6 @@ const AddStaffPage = () => {
                 register={register}
                 placeholder="Enter Bank Account No"
                 label="Bank Account No"
-                outerClassName="w-full"
               />
               <CustomInput
                 name="bankName"
@@ -133,7 +129,6 @@ const AddStaffPage = () => {
                 register={register}
                 placeholder="Enter Bank Name"
                 label="Bank Name "
-                outerClassName="w-full"
               />
             </div>
             <div className="flex max-md:flex-col gap-6">
@@ -143,7 +138,6 @@ const AddStaffPage = () => {
                 register={register}
                 placeholder="Enter BVN"
                 label="BVN"
-                outerClassName="w-full"
               />
               <CustomInput
                 name="legalEmployer"
@@ -151,7 +145,6 @@ const AddStaffPage = () => {
                 register={register}
                 placeholder="Enter Legal Employer"
                 label="Legal Employer"
-                outerClassName="w-full"
               />
             </div>
             <div className="mx-auto">

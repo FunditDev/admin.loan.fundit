@@ -72,7 +72,7 @@ const LoginForm = ({}: Props) => {
                     name="password"
                     register={register}
                     label="Password"
-                    errors={errors.password?.message}
+                    error={errors.password?.message}
                     placeholder="Enter your password"
                     required
                   />
