@@ -23,7 +23,8 @@ export const Endpoints = {
   addNewStaff:"/v2/smartcash/admin/add-staff",
   bulkUploadStaff: "/v2/smartcash/admin/bulkUploadStaff",
   getPendingUpdate: "/v2/smartcash/admin/getPendingUpdate",
-  logout: "/v2/smartcash/logout",
+  logout: "/v2/smartcash/admin/logout",
+  resetTempPassword: "/v2/smartcash/admin/resetTempPassword",
 
   
 };

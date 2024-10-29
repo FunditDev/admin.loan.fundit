@@ -8,20 +8,24 @@ import CustomButton from "../forms/CustomButton";
 import smartcash from "@public/smartcash-logo.svg";
 import { useFormContext } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 type Props = {};
-
 
 const LoginForm = ({}: Props) => {
   const {
     register,
     formState: { errors },
   } = useFormContext<LoginType>();
+  const [showPassword, setShowPassword] = React.useState(false);
   return (
     <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 w-full">
       <div className="w-full max-w-sm xl:w-full xl:max-w-md 2xl:max-w-md xl:mx-auto">
         <div className="self- mb-20">
-          <h2 className="text-white text-5xl font-semibold text-center"> Login</h2>
+          <h2 className="text-white text-5xl font-semibold text-center">
+            {" "}
+            Login
+          </h2>
           {/* <Image className="w-sm h-auto" src={smartcash} alt="" /> */}
         </div>
         <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl "></h2>
@@ -35,18 +39,31 @@ const LoginForm = ({}: Props) => {
                 required
                 name="staffId"
                 register={register}
-                errors={errors.staffId?.message}
+                error={errors.staffId?.message}
                 placeholder="Enter your Staff Id"
               />
             </div>
             <CustomInput
-              type="text"
+              type={showPassword ? "text" : "password"}
               label="Password"
               required
               name="password"
               register={register}
-              errors={errors.password?.message}
+              error={errors.password?.message}
               placeholder="Enter your Password"
+              icon={
+                showPassword ? (
+                  <EyeSlashIcon
+                    className="h-5 w-5 text-gray-500"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                ) : (
+                  <EyeIcon
+                    className="h-5 w-5 text-gray-500"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                )
+              }
             />
 
             {/* <div>
@@ -70,8 +87,6 @@ const LoginForm = ({}: Props) => {
                     </Link>
                   </div>
                 </div> */}
-
-            
           </div>
         </div>
         <p className="text-sm mt-5 absolute bottom-3 inset-x-0 w-full text-center font-bold text-gray-300 lg:hidden">

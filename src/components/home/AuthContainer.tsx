@@ -86,23 +86,6 @@ const AuthContainer = () => {
                     " LOGIN"
                   )}
                 </CustomButton>
-                <div className=" flex justify-between  items-center text-white mt-5 w-full">
-                  <div className="flex gap-2  items-center text-white">
-                    <p>Don&apos;t have an account ?</p>
-                    <Link
-                      href="/register"
-                      className="text-sm hover:underline duration-300 transition-all text-center text-yellow-200"
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
-                  {/* <Link
-                    href={"/forget-password"}
-                    className="text-yellow-300 hover:text-yellow-500 duration-300 transition-all"
-                  >
-                    Forget Password ?
-                  </Link> */}
-                </div>
               </div>
             </form>
             <AuthSidebar />
@@ -122,7 +105,7 @@ const AuthContainer = () => {
                 x: 0,
               }}
             >
-              <ResendVerification staffId={methods.getValues('staffId')}/>
+              <ResendVerification staffId={methods.getValues("staffId")} />
             </motion.div>
           </AnimatePresence>
           <AuthSidebar />

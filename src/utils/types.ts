@@ -86,3 +86,11 @@ export type Updatetype =
 
 }
 
+
+export type ResetTemporaryPasswordType = {
+  email: string;
+  oldPassword: string;
+  password: string;
+  confirmPassword: string;
+}
+export type SignUpType = {}

@@ -19,6 +19,7 @@ import { processNoAuth } from "@/utils/http";
 import { Endpoints } from "@/utils/endpoint";
 import { toast } from "react-toastify";
 import { setToken } from "@/utils/token";
+import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 const schema = yup.object().shape({
   staffId: yup.string().trim().required("Staff Id is required"),
@@ -88,6 +89,7 @@ const RegisterForm = () => {
       });
     }
   };
+  const [showPassword, setShowPassword] = React.useState(false);
   return (
     <section className=" bg-gradient-to-br from-[#d09192] to-[#c82471] ">
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
@@ -107,9 +109,8 @@ const RegisterForm = () => {
                     required
                     name="firstName"
                     register={register}
-                    errors={errors.firstName?.message}
+                    error={errors.firstName?.message}
                     placeholder="Enter your First Name"
-                    errorClassName="text-red-700"
                   />
                 </div>
                 <div>
@@ -119,9 +120,8 @@ const RegisterForm = () => {
                     required
                     name="lastName"
                     register={register}
-                    errors={errors.lastName?.message}
+                    error={errors.lastName?.message}
                     placeholder="Enter your Last Name"
-                    errorClassName="text-red-700"
                   />
                 </div>
                 <div>
@@ -131,9 +131,8 @@ const RegisterForm = () => {
                     required
                     name="staffEmail"
                     register={register}
-                    errors={errors.staffEmail?.message}
+                    error={errors.staffEmail?.message}
                     placeholder="Enter your Staff Email"
-                    errorClassName="text-red-700"
                   />
                 </div>
                 <div>
@@ -143,20 +142,31 @@ const RegisterForm = () => {
                     required
                     name="staffId"
                     register={register}
-                    errors={errors.staffId?.message}
+                    error={errors.staffId?.message}
                     placeholder="Enter your Staff Id"
-                    errorClassName="text-red-700"
                   />
                 </div>
                 <CustomInput
-                  type="text"
+                  type={showPassword ? "text" : "password"}
                   label="Password"
                   required
                   name="password"
                   register={register}
-                  errors={errors.password?.message}
+                  error={errors.password?.message}
                   placeholder="Enter your Password"
-                  errorClassName="text-red-700"
+                  icon={
+                    showPassword ? (
+                      <EyeSlashIcon
+                        className="h-5 w-5 text-gray-500"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    ) : (
+                      <EyeIcon
+                        className="h-5 w-5 text-gray-500"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    )
+                  }
                 />
 
                 <div className="pt-5">
