@@ -1,14 +1,21 @@
+'use client'
 import { Endpoints } from "@utils/endpoint";
 import { processWithAuth } from "@utils/http";
 import { removeToken } from "@/utils/token";
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
 import {
   Bars3Icon,
   UserCircleIcon,
   ChevronDownIcon,
 } from "@heroicons/react/20/solid";
 import { useRouter } from "next/navigation";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { toast } from "react-toastify";
 type Props = {
   setSidebarOpen: (value: boolean) => void;
@@ -16,13 +23,21 @@ type Props = {
 const Header = ({ setSidebarOpen }: Props) => {
   // const user = useAppSelector((state) => state.user?.user);
   // const dispatch = useAppDispatch();
+  const [user, setUser] = React.useState<any>();
   const router = useRouter();
+  const storeUser = localStorage.getItem("staff")!;
+  useEffect(() => {
+    if (!storeUser) {
+      router.push("/");
+    }
+    setUser(JSON.parse(storeUser));
+  }, []);
 
   const handleLogOut = async () => {
     try {
-      const res = await processWithAuth("get", Endpoints.logout);
       toast.success("Logout Successful");
       removeToken("token");
+      const res = await processWithAuth("get", Endpoints.logout);
       // removeToken("refreshToken");
       router.push("/");
       // dispatch(logOutUser());
@@ -66,7 +81,7 @@ const Header = ({ setSidebarOpen }: Props) => {
                   className="ml-4 text-sm font-semibold leading-6 text-gray-900"
                   aria-hidden="true"
                 >
-                  {/* {user?.firstname} {user?.lastname} */}
+                  {user?.firstName} {user?.lastName}
                 </span>
                 <ChevronDownIcon
                   className="ml-2 h-5 w-5 text-gray-400"

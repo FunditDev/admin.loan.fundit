@@ -2,7 +2,12 @@
 import { Endpoints } from "@/utils/endpoint";
 import { fetcher, fetcherWithAuth } from "./fetcher";
 import useSWR from "swr";
-import { LoansType, PendingStaffUpdate, Stafftype } from "@/utils/types";
+import {
+  LoansType,
+  OtherFiltersTypes,
+  PendingStaffUpdate,
+  Stafftype,
+} from "@/utils/types";
 
 export const useStaff = () => {
   const { isLoading, data, error } = useSWR<Stafftype[]>(
@@ -34,7 +39,7 @@ export const useFilterLoan = ({
   search = "All",
   dateTaken = null,
 }: {
-  search:"All" | "Running" | "Due This Month" | "Matured" | "Date Taken";
+  search: OtherFiltersTypes;
   dateTaken?: string[] | null;
 }) => {
   const { isLoading, data, error } = useSWR<LoansType[]>(
@@ -61,7 +66,6 @@ export const useSingleSmartcashloan = ({
   loanId: string;
   staffId: string;
 }) => {
-
   const { isLoading, data, error } = useSWR<LoansType>(
     `${Endpoints.getSingleStaffLoanById}/${loanId}?staffId=${staffId}`,
     fetcher
@@ -87,9 +91,10 @@ export const usePendingUpdate = () => {
 export const usePendingUpdatePage = () => {
   const { isLoading, data, error } = useSWR<PendingStaffUpdate[]>(
     Endpoints.getPendingUpdate,
-    fetcherWithAuth,{
-    revalidateOnMount: true,
-    revalidateOnFocus: false,
+    fetcherWithAuth,
+    {
+      revalidateOnMount: true,
+      revalidateOnFocus: false,
     }
   );
   return {

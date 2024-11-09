@@ -67,6 +67,7 @@ const RegisterForm = () => {
   //   }, []);
   const handleRegister = async (data: Registertype) => {
     // router.push("/dashboard");
+    return
     try {
       const rs = await processNoAuth("post", Endpoints.registerAdmin, data);
       if (rs?.data) {
@@ -90,6 +91,9 @@ const RegisterForm = () => {
     }
   };
   const [showPassword, setShowPassword] = React.useState(false);
+  return <div>
+    hello
+  </div>
   return (
     <section className=" bg-gradient-to-br from-[#d09192] to-[#c82471] ">
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">

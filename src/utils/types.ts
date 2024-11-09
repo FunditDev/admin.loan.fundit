@@ -10,12 +10,14 @@ export interface Registertype {
   staffEmail: string;
 }
 
-export type tokenType = "token" | "refreshToken"| "staff";
+export type tokenType = "token" | "refreshToken" | "staff";
 export type LoansType = {
   staff: {
     staffId: string;
     staffName: string;
     staffEmail: string;
+    bankAccount: string;
+    bvn: string;
   };
   staffId: string;
   amount: string;
@@ -33,7 +35,7 @@ export type LoansType = {
     fullyPaid: boolean;
     dateFullyPaid: Date;
     partialPayment: number;
-    originalAmount:string;
+    originalAmount: string;
   }[];
   message: string;
   scorePercent: number;
@@ -46,6 +48,8 @@ export type LoansType = {
   fullyPaid: boolean;
   interestPenalty: number;
   pendingLoanId: string;
+  nextRepaymentAmount: number;
+  paymentType: "Liquidation" | "Repayment";
 };
 export type LoanType = {
   amount: number;
@@ -74,8 +78,7 @@ export type PendingStaffUpdate = {
   updateType: "UPDATE" | "DELETE";
 } & Stafftype;
 
-export type Updatetype =
-{
+export type Updatetype = {
   staffId: string;
   firstName: string;
   lastName: string;
@@ -83,14 +86,29 @@ export type Updatetype =
   earnings: string;
   isPendingUpdate: boolean;
   updateType: "UPDATE" | "DELETE";
-
-}
-
+};
 
 export type ResetTemporaryPasswordType = {
   email: string;
   oldPassword: string;
   password: string;
   confirmPassword: string;
+};
+export type SignUpType = {};
+
+export enum FilterTypes {
+  All = "All",
+  Running = "Running",
+  DueThisMonth = "Due This Month",
+  Matured = "Matured",
+  DateTaken = "Date Taken",
+  Disbursed = "Disbursed",
+  Pending = "Pending",
+  Rejected = "Rejected",
+  NonDisbursed = "Non Disbursed",
+  Outstanding = "Outstanding",
+  // DateDisbursed = "Date Disbursed",
+  Liquidated = "Liquidated",
 }
-export type SignUpType = {}
+
+export type OtherFiltersTypes = `${FilterTypes}`;

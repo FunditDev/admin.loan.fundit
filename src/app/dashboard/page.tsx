@@ -56,7 +56,7 @@ const DashboardPage = () => {
               <p>{dashboardData.totalLoansAmount}</p>
             </div>
             <Link
-              href="/dashboard/loans"
+              href={"/dashboard/loans?filter=Disbursed"}
               className="text-blue-100 font-bold gap-1 flex items-center justify-center bottom-10 inset-x-0 absolute"
             >
               View All
@@ -72,14 +72,14 @@ const DashboardPage = () => {
               <p>{dashboardData.currentLoansDueForRepaymentAmount}</p>
             </div>
             <Link
-            href="/dashboard/loans"
-            className="text-green-100 font-bold gap-1 flex items-center justify-center bottom-10 inset-x-0"
-          >
-            View All
-            <ArrowRightIcon className="h-5 w-5" />
-          </Link>
+              href={`/dashboard/loans?filter=Due-This-Month`}
+              className="text-green-100 font-bold gap-1 flex items-center justify-center bottom-10 inset-x-0"
+            >
+              View All
+              <ArrowRightIcon className="h-5 w-5" />
+            </Link>
           </div>
-          <div className="py-10 px-4 min-h-52 h-full bg-red-500 shadow-custom border text-center rounded-md flex flex-col gap-10 relative" >
+          <div className="py-10 px-4 min-h-52 h-full bg-red-500 shadow-custom border text-center rounded-md flex flex-col gap-10 relative">
             {/* <BanknotesIcon className="h-20 w-20 mx-auto text-blue-500" /> */}
             <div className="text-white font-bold gap-1 flex items-center justify-center  flex-col">
               <div className="gap-1 flex items-center justify-center ">
@@ -88,12 +88,12 @@ const DashboardPage = () => {
               <p>{dashboardData.notPerformingLoansAmount}</p>
             </div>
             <Link
-            href="/dashboard/loans"
-            className="text-red-100 font-bold gap-1 flex items-center justify-center absolute bottom-10 inset-x-0"
-          >
-            View All
-            <ArrowRightIcon className="h-5 w-5" />
-          </Link>
+              href={`/dashboard/loans?filter=Outstanding`}
+              className="text-red-100 font-bold gap-1 flex items-center justify-center absolute bottom-10 inset-x-0"
+            >
+              View All
+              <ArrowRightIcon className="h-5 w-5" />
+            </Link>
           </div>
         </div>
       )}

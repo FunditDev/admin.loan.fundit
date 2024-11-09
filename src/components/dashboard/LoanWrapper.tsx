@@ -1,5 +1,5 @@
 "use client";
-import { LoansType } from "@/utils/types";
+import { LoansType, OtherFiltersTypes } from "@/utils/types";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import * as XLSX from "xlsx";
@@ -17,19 +17,24 @@ import { Description } from "node_modules/@headlessui/react/dist/components/desc
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-type Props = {
-  loans: LoansType[];
-};
-type OtherFiltersType = {
-  filter: "All" | "Running" | "Due This Month" | "Matured" | "Date Taken";
-};
-const LoanWrapper = () => {
+function blurString({
+  str,
+  visibleChars,
+}: {
+  str: string;
+  visibleChars: number;
+}) {
+  let lengthToBlur = str?.length - visibleChars;
+  let blurredPart = "*".repeat(lengthToBlur);
+  let visiblePart = str?.slice(lengthToBlur);
+  return blurredPart + visiblePart;
+}
+
+const LoanWrapper = ({ filter }: { filter: OtherFiltersTypes }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [offset, setOffset] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
-  const [otherFilters, setOtherFilters] = useState<OtherFiltersType>({
-    filter: "All",
-  });
+  const [otherFilters, setOtherFilters] = useState<OtherFiltersTypes>("All");
   const [filteredLoans, setFilteredLoans] = useState<LoansType[]>([]);
   // const [dateTaken, setDateTaken] = useState<Date>(new Date());
   const [rangeTaken, setRangeTaken] = useState<Date[]>([
@@ -40,15 +45,15 @@ const LoanWrapper = () => {
   const [callRange, setCallRange] = useState(false);
 
   const handleOtherFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value as OtherFiltersType["filter"];
+    const value = e.target.value as OtherFiltersTypes;
     if (value === "Date Taken") {
       setIsOpen(true);
       return;
     }
-    setOtherFilters({ filter: value });
+    setOtherFilters(value);
   };
   const handleDateFetch = () => {
-    setOtherFilters({ filter: "Date Taken" });
+    setOtherFilters("Date Taken");
     setCallRange(true);
     setIsOpen(false);
   };
@@ -57,7 +62,7 @@ const LoanWrapper = () => {
     data: newFilterLoan,
     error,
   } = useFilterLoan({
-    search: otherFilters.filter,
+    search: otherFilters,
     dateTaken: callRange
       ? [rangeTaken[0].toISOString(), rangeTaken[1].toISOString()]
       : null,
@@ -73,7 +78,20 @@ const LoanWrapper = () => {
       setCallRange(false);
       setFilteredLoans(newFilterLoan);
     }
-  }, [otherFilters.filter]);
+  }, [otherFilters]);
+  useEffect(() => {
+    if (filter) {
+      const splitFilter = filter.split("-");
+      if (splitFilter.length > 1) {
+        const formattedFilter = filter.split("-").join(" ") as typeof filter;
+        console.log(formattedFilter, "filter");
+        setOtherFilters(formattedFilter);
+      } else {
+        console.log(filter, "filter does not have -");
+        setOtherFilters(filter);
+      }
+    }
+  }, [filter]);
   useEffect(() => {
     const searchLowerCase = search.toLowerCase();
     const filtered = newFilterLoan
@@ -91,9 +109,9 @@ const LoanWrapper = () => {
 
     setFilteredLoans(filtered);
     setOffset(0); // Reset offset to 0 whenever the search term changes
-  }, [search, newFilterLoan, otherFilters.filter]);
+  }, [search, newFilterLoan, otherFilters]);
 
-  const itemsPerPage = 12;
+  const itemsPerPage = 25;
   const pageCount = Math.ceil(filteredLoans.length / itemsPerPage);
   const endOffset = offset + itemsPerPage;
   const currentLoans = filteredLoans.slice(offset, endOffset);
@@ -111,13 +129,9 @@ const LoanWrapper = () => {
     return parseFloat(amount.replace(/,/g, "")).toFixed(2);
   };
 
-  const calRemainingTenor = (tenor: any[]) => {
-    const remainingTenor = tenor.filter((t) => !t.fullyPaid);
-    return remainingTenor.length;
-  };
   const clearFilters = () => {
     setSearch("");
-    setOtherFilters({ filter: "All" });
+    setOtherFilters("All");
   };
   return (
     <div className="w-full mt-10 px-2 sm:px-10 md:mt-20">
@@ -141,7 +155,7 @@ const LoanWrapper = () => {
         <div className="flex gap-6 mx-auto">
           <OtherFilters
             handleChange={handleOtherFilterChange}
-            selectedVal={otherFilters.filter}
+            selectedVal={otherFilters}
           />
           <button
             onClick={() => exportToExcel(filteredLoans)}
@@ -159,27 +173,37 @@ const LoanWrapper = () => {
       </div>
       <div className="text-center mb-3">
         Showing{" "}
-        {otherFilters.filter === "All"
+        {otherFilters === "All"
           ? "All"
-          : otherFilters.filter === "Running"
+          : otherFilters === "Running"
           ? "Running Loans"
-          : otherFilters.filter === "Due This Month"
+          : otherFilters === "Due This Month"
           ? "Loans Due This Month"
-          : otherFilters.filter === "Matured"
+          : otherFilters === "Matured"
           ? "Matured Loans"
-          : otherFilters.filter === "Date Taken" &&
+          : otherFilters === "Disbursed"
+          ? "Disbursed Loans"
+          : otherFilters === "Liquidated"
+          ? "Liquidated Loans"
+          : otherFilters === "Outstanding"
+          ? "Outstanding Loans"
+          : otherFilters === "Date Taken" &&
             ` Loans Taken between ${rangeTaken[0].toLocaleDateString()} and ${rangeTaken[1].toLocaleDateString()}`}
       </div>
       <div className="overflow-x-auto min-h-[400px]">
         <table className="border border-collapse w-full whitespace-nowrap">
           <thead>
             <tr className="*:px-2 *:py-2 *:border ">
+              <th>S/N</th>
               <th>Staff Id</th>
+              <th>Staff Name</th>
+              <th>Beneficiary No</th>
               <th>Loan Request Date</th>
               <th>Amount Taken</th>
               <th>Total Repayment</th>
               <th>Amount Paid</th>
               <th>Outstanding</th>
+              <th>Next Repayment Amount</th>
               <th>
                 Tenor <span className="text-sm">(Month)</span>
               </th>
@@ -190,7 +214,7 @@ const LoanWrapper = () => {
           <tbody className="h-fit">
             {!currentLoans.length && !isLoadingSearch && (
               <tr className="*:px-2 *:py-2 *:border *:text-center *:text-sm">
-                <td colSpan={10} className="text-center">
+                <td colSpan={12} className="text-center">
                   No loans found
                 </td>
               </tr>
@@ -202,7 +226,7 @@ const LoanWrapper = () => {
                   className="*:px-2 *:py-2 *:border *:text-center *:text-sm"
                 >
                   <td
-                    colSpan={10}
+                    colSpan={12}
                     className={`${
                       index % 2 === 0 ? "bg-gray-300" : "bg-gray-200"
                     } animate-pulse h-10`}
@@ -215,7 +239,15 @@ const LoanWrapper = () => {
                   key={loan.loanId}
                   className="*:px-2 *:py-2 *:border *:text-center *:text-sm"
                 >
+                  <td>{filteredLoans.indexOf(loan) + 1} </td>
                   <td>{loan.staffId}</td>
+                  <td>{loan.staff.staffName}</td>
+                  <td>
+                    {blurString({
+                      str: loan.staff.bankAccount,
+                      visibleChars: 4,
+                    })}
+                  </td>
                   <td>{timeFormatter(loan.createdDate as unknown as Date)}</td>
                   <td>
                     {parseFloat(formatAmount(loan.amount)).toLocaleString(
@@ -260,11 +292,23 @@ const LoanWrapper = () => {
                           currency: "NGN",
                         })}
                   </td>
+                  <td>
+                    {loan.nextRepaymentAmount
+                      ? parseFloat(
+                          formatAmount(loan.nextRepaymentAmount)
+                        ).toLocaleString("en-NG", {
+                          style: "currency",
+                          currency: "NGN",
+                        })
+                      : "-"}
+                  </td>
                   <td>{loan.loanTenure.length}</td>
                   <td>
-                    {calRemainingTenor(loan.loanTenure) > 0
-                      ? "Running"
-                      : "Completed"}
+                    {loan.paymentType === "Liquidation"
+                      ? "Liquidated"
+                      : loan.paymentType === "Repayment"
+                      ? "Completed"
+                      : loan.loanStatus}
                   </td>
                   <td>
                     <Link
