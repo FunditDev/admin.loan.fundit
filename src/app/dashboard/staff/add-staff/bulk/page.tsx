@@ -20,6 +20,7 @@ const BulkUpload = () => {
 
   // Function to upload a single row of data to the server
   const handleFileUpload = (e: any) => {
+    return
     const file = e.target.files[0]; // Get the uploaded file
 
     if (file) {
@@ -74,7 +75,9 @@ const BulkUpload = () => {
       }
     }
   };
-
+return(
+  <div className="">howdy !</div>
+)
   return (
     <div>
       <input

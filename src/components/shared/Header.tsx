@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Endpoints } from "@utils/endpoint";
 import { processWithAuth } from "@utils/http";
 import { removeToken } from "@/utils/token";
@@ -25,8 +25,10 @@ const Header = ({ setSidebarOpen }: Props) => {
   // const dispatch = useAppDispatch();
   const [user, setUser] = React.useState<any>();
   const router = useRouter();
-  const storeUser = localStorage.getItem("staff")!;
   useEffect(() => {
+    const storeUser =
+      window.localStorage !== undefined &&
+      (localStorage.getItem("staff")! as any);
     if (!storeUser) {
       router.push("/");
     }

@@ -4,8 +4,6 @@ import { Endpoints } from "@/utils/endpoint";
 import { processWithAuth } from "@/utils/http";
 import {
   ArrowRightIcon,
-  BanknotesIcon,
-  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
