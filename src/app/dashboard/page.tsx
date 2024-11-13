@@ -16,6 +16,8 @@ const DashboardPage = () => {
     currentLoansDueForRepaymentAmount: 0,
     notPerformingLoanCount: 0,
     notPerformingLoansAmount: 0,
+    liquidatedLoansCount: 0,
+    liquidatedLoansAmount: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
   const getDashboardData = async () => {
@@ -87,6 +89,22 @@ const DashboardPage = () => {
             </div>
             <Link
               href={`/dashboard/loans?filter=Outstanding`}
+              className="text-red-100 font-bold gap-1 flex items-center justify-center absolute bottom-10 inset-x-0"
+            >
+              View All
+              <ArrowRightIcon className="h-5 w-5" />
+            </Link>
+          </div>
+          <div className="py-10 px-4 min-h-52 h-full bg-indigo-500 hover:bg-indigo-600 duration-300 transition-all shadow-custom border text-center rounded-md flex flex-col gap-10 relative">
+            {/* <BanknotesIcon className="h-20 w-20 mx-auto text-blue-500" /> */}
+            <div className="text-white font-bold gap-1 flex items-center justify-center  flex-col">
+              <div className="gap-1 flex items-center justify-center ">
+                Total Liquidated Loans ({dashboardData.liquidatedLoansCount})
+              </div>
+              <p>{dashboardData.liquidatedLoansAmount}</p>
+            </div>
+            <Link
+              href={"/dashboard/loans?filter=Liquidated"}
               className="text-red-100 font-bold gap-1 flex items-center justify-center absolute bottom-10 inset-x-0"
             >
               View All
