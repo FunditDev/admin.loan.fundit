@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+const companyCode = process.env.NEXT_PUBLIC_COMPANY_CODE;
 const DashboardPage = () => {
   const [dashboardData, setDashboardData] = React.useState({
     totalLoansAmount: 0,
@@ -24,7 +25,7 @@ const DashboardPage = () => {
     try {
       const dashboardData = await processWithAuth(
         "get",
-        Endpoints.getDashboardData
+        `${Endpoints.getDashboardData}/${companyCode}`
       );
       setIsLoading(false);
       setDashboardData(dashboardData?.data);
