@@ -2,12 +2,7 @@
 import React, { useEffect } from "react";
 import CustomInput from "../forms/CustomInput";
 import { LoginType } from "@utils/types";
-import Image from "next/image";
-
-import CustomButton from "../forms/CustomButton";
-import smartcash from "@public/smartcash-logo.svg";
 import { useFormContext } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 type Props = {};
@@ -19,7 +14,7 @@ const LoginForm = ({}: Props) => {
   } = useFormContext<LoginType>();
   const [showPassword, setShowPassword] = React.useState(false);
   return (
-    <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 w-full">
+    <div className="flex flex-col items-center justify-center w-full">
       <div className="w-full max-w-sm xl:w-full xl:max-w-md 2xl:max-w-md xl:mx-auto">
         <div className="self- mb-20">
           <h2 className="text-white text-5xl font-semibold text-center">

@@ -1,58 +1,54 @@
 "use client";
-import React, { useState } from "react";
-import AuthSidebar from "./AuthSidebar";
-import LoginForm from "./LoginForm";
+import React, { useEffect, useState } from "react";
+import AuthSidebar from "@components/home/AuthSidebar";
+import ResetForm from "./ResetForm";
 import { Endpoints } from "@/utils/endpoint";
 import { processNoAuth } from "@/utils/http";
 import { setToken } from "@/utils/token";
-import { LoginType } from "@/utils/types";
+import { LoginType, ResetType } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
+
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import CustomButton from "../forms/CustomButton";
-import { SpinnerTwo } from "../icons/Spinner";
-import { useRouter } from "next/navigation";
-import ResendVerification from "./ResendVerification";
+import CustomButton from "../../forms/CustomButton";
+import { SpinnerTwo } from "../../icons/Spinner";
+import { useRouter, useSearchParams } from "next/navigation";
+// import ResendVerification from "./ResendVerification";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import ConfirmResetPassword from "./ConfirmResetPassword";
 
 const schema = yup.object().shape({
-  staffId: yup.string().trim().required("Staff Id is required"),
-  password: yup.string().trim().required("Password is required"),
+  email: yup.string().trim().required("Password is required"),
 });
-const AuthContainer = () => {
-  const router = useRouter();
+
+const ResetContainer = () => {
   const [steps, setSteps] = useState(0);
   const methods = useForm({
     resolver: yupResolver(schema),
   });
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  useEffect(() => {
+    if (token) {
+      console.log(token);
+      setSteps(1);
+    }
+  }, [token]);
 
-  const handleLoginSumbit = async (data: LoginType) => {
+  const handleResettoken = async (data: ResetType) => {
     // router.push("/dashboard");
     try {
-      const rs = await processNoAuth("post", Endpoints.loginAdmin, data);
+      const rs = await processNoAuth("post", Endpoints.sendResetToken, data);
       if (rs?.data) {
-        toast.success("Login Successful", {
+        toast.success(rs.data.message, {
           toastId: "success",
           position: "top-right",
         });
-        setToken("token", rs.data.token);
-        setToken("staff", JSON.stringify(rs.data.staff));
-
-        router.push("/dashboard");
-        // router.push("/dashboard");  
       }
     } catch (err: any) {
-      if (
-        err.statusCode === 400 &&
-        err.error.toLowerCase() === "please verify your email"
-      ) {
-        setSteps(1);
-        await processNoAuth("post", Endpoints.resendVerification, {
-          staffId: data.staffId,
-        });
-      } else if (err.status === 401) {
+      if (err.status === 401) {
         alert("Invalid Staff Id");
       } else {
         toast.error(err.error, {
@@ -66,16 +62,16 @@ const AuthContainer = () => {
     }
   };
   return (
-    <section className=" bg-gradient-to-br from-[#d09192] to-[#c82471] ">
+    <section className=" bg-gradient-to-br from-[#d09192] to-[#c82471]  ">
       {steps === 0 ? (
         <FormProvider {...methods}>
           <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen ">
             <div className="flex items-center flex-col justify-center max-w-sm w-full mx-auto">
               <form
                 className=" flex items-center  flex-col w-full justify-center"
-                onSubmit={methods.handleSubmit(handleLoginSumbit)}
+                onSubmit={methods.handleSubmit(handleResettoken)}
               >
-                <LoginForm />
+                <ResetForm />
                 <div className="w-full  mt-8">
                   <CustomButton
                     type="submit"
@@ -84,17 +80,20 @@ const AuthContainer = () => {
                     {methods.formState.isSubmitting ? (
                       <SpinnerTwo className=" text-center !mx-auto size-5" />
                     ) : (
-                      " LOGIN"
+                      " Send Email Reset Link"
                     )}
                   </CustomButton>
                 </div>
               </form>
-              <Link
-                href={"/auth/reset-password"}
-                className="self-end mt-3 text-blue-100 hover:text-blue-200 duration-300 transition-all"
-              >
-                Forgot Password
-              </Link>
+              <div className="flex justify-between items-center w-full mt-3 text-yellow-200">
+                <p className="">Remember your password? </p>
+                <Link
+                  href={"/"}
+                  className=" text-yellow-100 hover:text-yellow-300 duration-300 transition-all"
+                >
+                  Login
+                </Link>
+              </div>
             </div>
 
             <AuthSidebar />
@@ -114,7 +113,7 @@ const AuthContainer = () => {
                 x: 0,
               }}
             >
-              <ResendVerification staffId={methods.getValues("staffId")} />
+              <ConfirmResetPassword token={token!} />
             </motion.div>
           </AnimatePresence>
           <AuthSidebar />
@@ -124,4 +123,4 @@ const AuthContainer = () => {
   );
 };
 
-export default AuthContainer;
+export default ResetContainer;

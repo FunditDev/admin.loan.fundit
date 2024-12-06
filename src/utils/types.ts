@@ -2,6 +2,9 @@ export interface LoginType {
   staffId: string;
   password: string;
 }
+export type ResetType={
+  email:string
+}
 export interface Registertype {
   staffId: string;
   password: string;

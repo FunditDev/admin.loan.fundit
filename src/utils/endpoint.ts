@@ -25,6 +25,7 @@ export const Endpoints = {
   getPendingUpdate: "/v2/smartcash/admin/getPendingUpdate",
   logout: "/v2/smartcash/admin/logout",
   resetTempPassword: "/v2/smartcash/admin/resetTempPassword",
-
+  sendResetToken: "/v2/smartcash/admin/resetPassword",
+  confirmResetPassword: "/v2/smartcash/admin/confirmPasswordReset",
   
 };
