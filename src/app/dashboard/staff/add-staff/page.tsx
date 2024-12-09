@@ -20,7 +20,9 @@ type AddStaffType = {
   bankName: string;
   bvn: string;
   legalEmployer: string;
+  
 };
+const companyCode = process.env.NEXT_PUBLIC_COMPANY_CODE;
 const AddStaffPage = () => {
   const {
     register,
@@ -36,7 +38,7 @@ const AddStaffPage = () => {
     );
     if (confirmSubmit) {
       try {
-        const res = await processWithAuth("post", Endpoints.addNewStaff, {
+        const res = await processWithAuth("post", `${Endpoints.addNewStaff}/${companyCode}`, {
           ...data,
           earnings: parseFloat(data.earnings.replace(/,/g, "")),
           bankAccount: data.bankAccount,
