@@ -6,6 +6,7 @@ import React from "react";
 import { start } from "repl";
 import * as XLSX from "xlsx";
 
+const companyCode = process.env.NEXT_PUBLIC_COMPANY_CODE;
 const BulkUpload = () => {
   const parseExcel = (filePath: string) => {
     const workbook = XLSX.readFile(filePath);
@@ -20,7 +21,7 @@ const BulkUpload = () => {
 
   // Function to upload a single row of data to the server
   const handleFileUpload = (e: any) => {
-    return
+    // return
     const file = e.target.files[0]; // Get the uploaded file
 
     if (file) {
@@ -28,7 +29,7 @@ const BulkUpload = () => {
 
       reader.onload = function (event: any) {
         const data = new Uint8Array(event?.target.result as any); // Read file data as an array buffer
-        const workbook = XLSX.read(data, { type: "array" }); // Parse the Excel file
+        const workbook = XLSX.read(data); // Parse the Excel file
 
         // Assuming you're reading the first sheet:
         const firstSheetName = workbook.SheetNames[0];
@@ -36,16 +37,31 @@ const BulkUpload = () => {
 
         // Convert sheet to JSON
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
-        setParsedData(jsonData); // Set the parsed data to state
+        setParsedData(jsonData);
+        // extractCreditiumData(jsonData); // Set the parsed data to state
       };
 
       reader.readAsArrayBuffer(file); // Read the file as an array buffer
     }
   };
+  const extractCreditiumData = (jsonData: any[]) => {
+    // Filter out the rows containing the "Creditium" header and extract relevant data
+    console.log(jsonData, "jsonData -->");
+    const creditiumData = jsonData
+      .filter((row) => row["Creditium"]) // Adjust to match the header name exactly
+      .map((row) => ({
+        staffId: row["staffId"], // Replace with actual column name from your Excel
+        accountNumber: row["account numbers"], // Replace with actual column name
+      }));
+
+    setParsedData(creditiumData); // Set extracted data
+    console.log("Extracted Data:", creditiumData);
+  };
+  console.log(parsedData, "parsedData -->");
 
   const handleUpload = async () => {
-    let stoppedNumber = 0;
     return
+    let stoppedNumber = 0;
     for (let i = 0; i < parsedData.length; i++) {
       try {
         //   if (i > 2) {
@@ -75,18 +91,58 @@ const BulkUpload = () => {
       }
     }
   };
-return(
-  <div className="">howdy !</div>
-)
+  const handleUpdateUpload = async () => {
+    return
+    let stoppedNumber = 0;
+    for (let i = 93; i < 100; i++) {
+      try {
+        //   if (i > 2) {
+        //     return;
+        //   }
+        const staff = parsedData[i];
+        console.log(staff);
+        const res = await processWithAuth(
+          "post",
+          `${Endpoints.updateAndApprove}/${companyCode}`,
+          {
+            staffId: staff["Staff Id"].toString(),
+            nuban: staff.Nuban,
+          }
+        );
+        console.log(res, "res -->", i);
+      } catch (error: any) {
+        console.log(error, "error -->");
+        if (error) {
+          stoppedNumber = i;
+          console.log(`stopped at ${stoppedNumber}`);
+          break;
+        }
+      }
+      // return;
+    }
+  };
+  // return(
+  //   <div className="">howdy !</div>
+  // )
   return (
-    <div>
+    <div className="flex flex-col gap-3 py-6">
       <input
         type="file"
         name="sc-file"
         id="upload sc file"
         onChange={handleFileUpload}
       />
-      <button onClick={() => handleUpload()}>Upload</button>
+      <div className="flex gap-8">
+        <button onClick={handleUpload} className="bg-green-500 py-2 px-2">
+          Upload New Staff
+        </button>
+        <button
+          className="bg-orange-500 py-2 px-2"
+          onClick={handleUpdateUpload}
+        >
+          Bulk Update Staff
+        </button>
+      </div>
     </div>
   );
 };
