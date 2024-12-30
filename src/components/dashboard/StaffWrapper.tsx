@@ -22,7 +22,7 @@ const StaffWrapper = ({ staffs }: Props) => {
     setIsLoading(false);
   }, [staffs]);
 
-  const itemsPerPage = 12;
+  const itemsPerPage = 25;
   const pageCount = Math.ceil(filteredStaffs.length / itemsPerPage);
   const endOffset = offset + itemsPerPage;
   const currentstaffs = filteredStaffs.slice(offset, endOffset);
