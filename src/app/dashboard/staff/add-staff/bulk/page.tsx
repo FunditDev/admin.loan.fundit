@@ -2,6 +2,7 @@
 import { Endpoints } from "@/utils/endpoint";
 import { processWithAuth } from "@/utils/http";
 import React from "react";
+import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 
 const companyCode = process.env.NEXT_PUBLIC_COMPANY_CODE;
@@ -16,6 +17,7 @@ const BulkUpload = () => {
 
   const [parsedData, setParsedData] = React.useState<any[]>([]);
   const [startNumber, setStartNumber] = React.useState(0);
+  const [errMessage, setErrMessage] = React.useState("");
 
   // Function to upload a single row of data to the server
   const handleFileUpload = (e: any) => {
@@ -60,7 +62,7 @@ const BulkUpload = () => {
   const handleUpload = async () => {
     // return
     let stoppedNumber = 0;
-    for (let i = 26; i < parsedData.length; i++) {
+    for (let i = startNumber; i < parsedData.length; i++) {
       try {
         //   if (i > 2) {
         //     return;
@@ -92,6 +94,14 @@ const BulkUpload = () => {
         if (error) {
           stoppedNumber = i;
           console.log(`stopped at ${stoppedNumber}`);
+          toast.error("Stopped at " + stoppedNumber, {
+            toastId: "stoppedError",
+            position: "top-right",
+          });
+          if(error.statusCode ===400){
+
+            setErrMessage(`${error.error} at row ${i} with staff id ${parsedData[i]["EMPLOYEE_NUMBER"]}`);
+          }
           break;
         }
       }
@@ -138,6 +148,19 @@ const BulkUpload = () => {
         id="upload sc file"
         onChange={handleFileUpload}
       />
+      <div className="">
+        <label htmlFor="startNumber">
+          Start Number (This is the row number to start from)
+        </label>
+        <input
+          type="number"
+          value={startNumber}
+          onChange={(e) => setStartNumber(e.target.valueAsNumber)}
+          name="startNumber"
+          id="startNumber"
+          className="border border-gray-300"
+        />
+      </div>
       <div className="flex gap-8">
         <button onClick={handleUpload} className="bg-green-500 py-2 px-2">
           Upload New Staff
@@ -145,10 +168,11 @@ const BulkUpload = () => {
         {/* <button
           className="bg-orange-500 py-2 px-2"
           onClick={handleUpdateUpload}
-        >
+          >
           Bulk Update Staff
-        </button> */}
+          </button> */}
       </div>
+      {errMessage && <p className="text-red-500">{errMessage}</p>}
       {/* /excel format for uploading new staff */}
       <div className="flex flex-col gap-3">
         <h1>Excel format for uploading new staff</h1>
