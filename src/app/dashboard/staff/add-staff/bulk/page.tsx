@@ -1,9 +1,7 @@
 "use client";
 import { Endpoints } from "@/utils/endpoint";
 import { processWithAuth } from "@/utils/http";
-import path from "path";
 import React from "react";
-import { start } from "repl";
 import * as XLSX from "xlsx";
 
 const companyCode = process.env.NEXT_PUBLIC_COMPANY_CODE;
@@ -60,27 +58,35 @@ const BulkUpload = () => {
   console.log(parsedData, "parsedData -->");
 
   const handleUpload = async () => {
-    return
+    // return
     let stoppedNumber = 0;
-    for (let i = 0; i < parsedData.length; i++) {
+    for (let i = 26; i < parsedData.length; i++) {
       try {
         //   if (i > 2) {
         //     return;
         //   }
         const staff = parsedData[i];
+        // return
+        if (!staff) {
+          return;
+        }
 
-        const res = await processWithAuth("post", Endpoints.addNewStaff, {
-          staffId: staff.EMPLOYEE_NUMBER.toString(),
-          firstName: staff.First_Name,
-          lastName: staff.Last_Name,
-          staffEmail: staff.EMAIL_ADDRESS,
-          earnings: staff.Monthly_Payment_to_Smartcash,
-          bvn: staff.BVN.toString(),
-          bankAccount: staff.ACCOUNT_NO.toString(),
-          legalEmployer: staff.Legal_Employer,
-          bankName: "Smartcash Wallet",
-        });
-        console.log(res, "res -->");
+        const res = await processWithAuth(
+          "post",
+          `${Endpoints.addNewStaff}/${companyCode}`,
+          {
+            staffId: staff["EMPLOYEE_NUMBER"].toString(),
+            firstName: staff["First Name"],
+            lastName: staff["Last Name"],
+            staffEmail: staff["EMAIL_ADDRESS"],
+            earnings: staff["Monthly Payment"],
+            bvn: staff["BVN"].toString(),
+            bankAccount: staff["Account Number"].toString(),
+            legalEmployer: staff["LEGAL_EMPLOYER_NAME"],
+            bankName: "Smartcash Wallet",
+          }
+        );
+        console.log(res, "res -->", i);
       } catch (error: any) {
         console.log(error, "error -->");
         if (error) {
@@ -92,7 +98,7 @@ const BulkUpload = () => {
     }
   };
   const handleUpdateUpload = async () => {
-    return
+    // return
     let stoppedNumber = 0;
     for (let i = 93; i < 100; i++) {
       try {
@@ -136,12 +142,45 @@ const BulkUpload = () => {
         <button onClick={handleUpload} className="bg-green-500 py-2 px-2">
           Upload New Staff
         </button>
-        <button
+        {/* <button
           className="bg-orange-500 py-2 px-2"
           onClick={handleUpdateUpload}
         >
           Bulk Update Staff
-        </button>
+        </button> */}
+      </div>
+      {/* /excel format for uploading new staff */}
+      <div className="flex flex-col gap-3">
+        <h1>Excel format for uploading new staff</h1>
+        {/* table */}
+        <div className="overflow-x-auto min-h-[100px]">
+          <table className="border border-collapse w-full whitespace-nowrap table-auto">
+            <thead>
+              <tr className="*:px-2 *:py-2 *:border ">
+                <th>EMPLOYEE_NUMBER</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>EMAIL_ADDRESS</th>
+                <th>Monthly Payment</th>
+                <th>BVN</th>
+                <th>Account Number</th>
+                <th>LEGAL_EMPLOYER_NAME</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="*:px-2 *:py-2 *:border *:text-center">
+                <td>363636</td>
+                <td>John</td>
+                <td>Doe</td>
+                <td>johndoe@airtel.com.ng </td>
+                <td>100000</td>
+                <td>1234567890</td>
+                <td>22345678901</td>
+                <td>Airtel Nigeria</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

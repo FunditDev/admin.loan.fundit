@@ -1,5 +1,3 @@
-import { register } from "module";
-import { get } from "node_modules/axios/index.cjs";
 
 export const Endpoints = {
   loginAdmin: "/v2/smartcash/admin/login",

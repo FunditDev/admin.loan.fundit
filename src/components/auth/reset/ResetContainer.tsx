@@ -4,7 +4,6 @@ import AuthSidebar from "@components/home/AuthSidebar";
 import ResetForm from "./ResetForm";
 import { Endpoints } from "@/utils/endpoint";
 import { processNoAuth } from "@/utils/http";
-import { setToken } from "@/utils/token";
 import { LoginType, ResetType } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
