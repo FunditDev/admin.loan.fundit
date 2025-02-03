@@ -53,6 +53,8 @@ export type LoansType = {
   pendingLoanId: string;
   nextRepaymentAmount: number;
   paymentType: "Liquidation" | "Repayment";
+  liquidation: LiquidationType;
+
 };
 export type LoanType = {
   amount: number;
@@ -115,3 +117,13 @@ export enum FilterTypes {
 }
 
 export type OtherFiltersTypes = `${FilterTypes}`;
+
+export type LiquidationType = {
+  liquidatedBy: string;
+  liquidationDate: string;
+  liquidationInterest: string;
+  liquidationAmount: string;
+  insuranceAmount: string;
+  accruedInterest: string;
+  noOfDaysBetween: number;
+};

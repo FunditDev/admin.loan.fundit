@@ -293,7 +293,11 @@ const LoanWrapper = ({ filter }: { filter: OtherFiltersTypes }) => {
                         })}
                   </td>
                   <td>
-                    {loan.nextRepaymentAmount
+                    {loan.liquidation &&
+                    loan.liquidation.liquidationAmount &&
+                    loan.paymentType === "Liquidation"
+                      ? 0
+                      : loan.nextRepaymentAmount
                       ? parseFloat(
                           formatAmount(loan.nextRepaymentAmount)
                         ).toLocaleString("en-NG", {
