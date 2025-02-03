@@ -277,7 +277,11 @@ const LoanWrapper = ({ filter }: { filter: OtherFiltersTypes }) => {
                     )}
                   </td>
                   <td className="text-center px-3 text-gray-700 border">
-                    {loan.amountPaid
+                    {loan.liquidation &&
+                    loan.liquidation.liquidationAmount &&
+                    loan.paymentType === "Liquidation"
+                      ? 0
+                      : loan.amountPaid
                       ? Math.abs(
                           parseFloat(formatAmount(loan.totalRepayment)) -
                             loan.amountPaid
@@ -293,11 +297,7 @@ const LoanWrapper = ({ filter }: { filter: OtherFiltersTypes }) => {
                         })}
                   </td>
                   <td>
-                    {loan.liquidation &&
-                    loan.liquidation.liquidationAmount &&
-                    loan.paymentType === "Liquidation"
-                      ? 0
-                      : loan.nextRepaymentAmount
+                    {loan.nextRepaymentAmount
                       ? parseFloat(
                           formatAmount(loan.nextRepaymentAmount)
                         ).toLocaleString("en-NG", {
