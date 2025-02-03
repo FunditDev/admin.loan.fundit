@@ -102,7 +102,8 @@ const LoanWrapper = ({ filter }: { filter: OtherFiltersTypes }) => {
             timeFormatter(loan.createdDate as unknown as Date)
               .toString()
               .toLowerCase()
-              .includes(searchLowerCase)
+              .includes(searchLowerCase) ||
+            loan.staff.staffName.toLowerCase().includes(searchLowerCase)
           );
         })
       : [];
