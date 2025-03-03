@@ -25,5 +25,6 @@ export const Endpoints = {
   resetTempPassword: "/v2/smartcash/admin/resetTempPassword",
   sendResetToken: "/v2/smartcash/admin/resetPassword",
   confirmResetPassword: "/v2/smartcash/admin/confirmPasswordReset",
+  updateStaffExit:"/v2/smartcash/admin/staff/update/exit",
   
 };

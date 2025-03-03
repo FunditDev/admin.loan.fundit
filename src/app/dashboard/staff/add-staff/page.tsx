@@ -29,7 +29,7 @@ const AddStaffPage = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<AddStaffType>({
-    defaultValues: { bankName: "SmartCash" },
+    defaultValues: { bankName: "Fundit" },
   });
   const router = useRouter();
   const handleStaffAdd = async (data: AddStaffType) => {

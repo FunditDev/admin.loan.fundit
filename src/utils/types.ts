@@ -127,3 +127,31 @@ export type LiquidationType = {
   accruedInterest: string;
   noOfDaysBetween: number;
 };
+
+export type EmployeeLoanProfile = {
+  matchRate?: number;
+  isExited?: boolean;
+  sub?: string;
+  staffId: string;
+  staffEmail: string;
+  firstName: string;
+  lastName: string;
+  earnings: string;
+  bvn?: string;
+  bankAccount?: string;
+  bankName?: string;
+  legalEmployer?: string;
+  maxLoan?: number;
+  maxLoanCreditScore?: number;
+  companyCode?: string;
+  company?: string;
+  canTopUp?: boolean;
+  topUpCount?: number;
+  blackList?: boolean;
+  permanentBlacklist?: boolean;
+  createdAt?: string; // ISO date string
+  updatedBy?: any[]; // Assuming an array of unknown objects
+  updatedAt?: string; // ISO date string
+  customerCode?: string;
+  fullName?: string;
+};

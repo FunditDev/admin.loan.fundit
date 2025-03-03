@@ -5,9 +5,16 @@ import CustomInput from "@/components/forms/CustomInput";
 import { SpinnerTwo } from "@/components/icons/Spinner";
 import { Endpoints } from "@/utils/endpoint";
 import { processNoAuth, processWithAuth } from "@/utils/http";
-import { Transition, Dialog, TransitionChild, DialogPanel, DialogTitle } from "@headlessui/react";
+import { EmployeeLoanProfile } from "@/utils/types";
+import {
+  Transition,
+  Dialog,
+  TransitionChild,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
-import {  useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 type StaffType = {
@@ -45,7 +52,7 @@ const Page = ({
       setIsFetching(false);
     }
   };
-  const [staffDetails, setStaffDetails] = useState<StaffType>({
+  const [staffDetails, setStaffDetails] = useState<EmployeeLoanProfile | null>({
     firstName: "",
     lastName: "",
     staffEmail: "",
@@ -69,36 +76,40 @@ const Page = ({
   useEffect(() => {
     fetchStaff();
   }, []);
-
+  const [permanentExit, setPermanentExit] = useState(false);
   useEffect(() => {
     reset({
-      lastName: staffDetails.lastName,
-      firstName: staffDetails.firstName,
-      staffEmail: staffDetails.staffEmail,
-      earnings: staffDetails.earnings,
+      lastName: staffDetails?.lastName,
+      firstName: staffDetails?.firstName,
+      staffEmail: staffDetails?.staffEmail,
+      earnings: staffDetails?.earnings,
     });
+    if (staffDetails?.permanentBlacklist) {
+      setPermanentExit(staffDetails?.permanentBlacklist!);
+    }
   }, [staffDetails]);
+  const [isExiting, setIsExiting] = useState(false);
   const handleUpdate = async (data: StaffType) => {
     const confirmSubmit = confirm(
       "Are you sure you want to update this staff?"
     );
     if (confirmSubmit) {
-      if (staffDetails.staffEmail !== data.staffEmail) {
+      if (staffDetails?.staffEmail !== data.staffEmail) {
         alert("You cannot update the staff email");
         return;
       }
-      if (staffDetails.firstName !== data.firstName) {
+      if (staffDetails?.firstName !== data.firstName) {
         alert("You cannot update the staff First Name");
         return;
       }
       try {
         const res = await processWithAuth(
           "post",
-          `${Endpoints.updateStaff}`,
+          `${Endpoints.updateStaff}/${process.env.NEXT_PUBLIC_COMPANY_CODE}`,
           {
             ...data,
             earnings: parseFloat(data.earnings.replace(/,/g, "")),
-            staffId: staffDetails.staffId,
+            staffId: staffDetails?.staffId,
             updateType: "UPDATE",
           }
         );
@@ -142,11 +153,11 @@ const Page = ({
       "Are you sure you want to update this staff?"
     );
     if (confirmSubmit) {
-      if (staffDetails.staffEmail !== data.staffEmail) {
+      if (staffDetails?.staffEmail !== data.staffEmail) {
         alert("You cannot update the staff email");
         return;
       }
-      if (staffDetails.firstName !== data.firstName) {
+      if (staffDetails?.firstName !== data.firstName) {
         alert("You cannot update the staff First Name");
         return;
       }
@@ -154,11 +165,11 @@ const Page = ({
       try {
         const res = await processWithAuth(
           "post",
-          `${Endpoints.updateAndApprove}`,
+          `${Endpoints.updateAndApprove}/${process.env.NEXT_PUBLIC_COMPANY_CODE}`,
           {
             ...data,
             earnings: parseFloat(data.earnings.replace(/,/g, "")),
-            staffId: staffDetails.staffId,
+            staffId: staffDetails?.staffId,
             updateType: "UPDATE",
           }
         );
@@ -198,7 +209,8 @@ const Page = ({
     } else {
       return;
     }
-  }
+  };
+
   const handleDelete = async () => {
     return;
     const confirmSubmit = confirm(
@@ -237,8 +249,47 @@ const Page = ({
       </div>
     );
 
+  const handleExitStaff = async () => {
+    if (staffDetails?.permanentBlacklist) {
+      toast.error("Staff has already been exited");
+      return;
+    }
+    const message = !staffDetails?.permanentBlacklist ? "exit" : "undo";
+    const confirmSubmit = confirm(
+     `Are you sure you want to ${message} this staff? \n This action is irreversible`
+    );
+    if (confirmSubmit) {
+      try {
+        const res = await processWithAuth(
+          "post",
+          `${Endpoints.updateStaffExit}/${process.env.NEXT_PUBLIC_COMPANY_CODE}`,
+          {
+            permanentBlacklist: permanentExit || true,
+            staffId: staffDetails?.staffId,
+          }
+        );
+        toast.success("Staff Exit Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      } catch (e: any) {
+        console.log(e, "hdhdjd");
+        if (Array.isArray(e.error)) {
+          // e.error.forEach((err) => {
+          //   toast.error(err);
+          // });
+          toast.error(e.error[0]);
+        } else {
+          toast.error(e.error);
+        }
+      }
+    } else {
+      return;
+    }
+  };
+
   return (
-    <div className="bg-white shadow-sm px-5 sm:px-10 py-10 rounded-md w-full  max-w-[400px] mx-auto sm:max-w-[600px] sm:min-w-[420px]">
+    <div className="bg-white shadow-lg mt-10 px-5 sm:px-10 py-10 rounded-md w-full  max-w-[400px] mx-auto sm:max-w-[600px] sm:min-w-[420px]">
       <h1 className="font-bold text-2xl text-center">Staff - {params.slug}</h1>
       <div className="flex flex-col mt-10">
         <form
@@ -281,23 +332,28 @@ const Page = ({
             aria-disabled
           />
           <div className=" flex gap-4 sm:gap-10 items-center flex-col sm:flex-row">
-
-          <CustomButton disabled={isSubmitting || isUpdating} type="submit" outerClassName="w-full">
+            {/* <CustomButton disabled={isSubmitting || isUpdating} type="submit" outerClassName="w-full">
             {isSubmitting ? (
               <SpinnerTwo className="!w-5 !mx-auto" />
             ) : (
               "Update Staff Details"
             )}
-          </CustomButton>
-          <CustomButton disabled={isSubmitting || isUpdating} type="button" outerClassName="w-full" handleClick={()=>handleUpdateApprove(getValues())}>
-            {isUpdating ? (
-              <SpinnerTwo className="!w-5 !mx-auto" />
-            ) : (
-              "Update And Approve"
-            )}
-          </CustomButton>
+          </CustomButton> */}
+            <CustomButton
+              disabled={isSubmitting || isUpdating}
+              type="button"
+              outerClassName="w-full"
+              handleClick={() => handleUpdateApprove(getValues())}
+            >
+              {isUpdating ? (
+                <SpinnerTwo className="!w-5 !mx-auto" />
+              ) : (
+                "Update Staff Information"
+              )}
+            </CustomButton>
           </div>
         </form>
+
         {/* Uncomment if need for deleting staff arise */}
         {/* <p className="text-center py-2">Or</p> */}
         {/* <div>
@@ -310,6 +366,39 @@ const Page = ({
             Delete Staff
           </CustomButton>
         </div> */}
+      </div>
+
+      <div className="flex flex-col mt-10   border-t">
+        <form className="pt-5" onSubmit={(e) => e.preventDefault()}>
+          <div className="mb-6 flex items-center gap-4">
+            <label
+              htmlFor="exit-staff"
+              className="cursor-pointer text-sm font-medium"
+            >
+              Exit Staff:{" "}
+            </label>
+            <input
+              type="checkbox"
+              name="exit-staff"
+              id="exit-staff"
+              className="w-5 h-5"
+              checked={permanentExit}
+              onChange={(e) => setPermanentExit(e.target.checked)}
+            />
+          </div>
+          <CustomButton
+            disabled={isExiting || isUpdating}
+            type="button"
+            outerClassName="w-full"
+            handleClick={() => handleExitStaff()}
+          >
+            {isExiting ? (
+              <SpinnerTwo className="!w-5 !mx-auto" />
+            ) : (
+              "Exit Staff From Service"
+            )}
+          </CustomButton>
+        </form>
       </div>
       <InstructionModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
