@@ -52,7 +52,7 @@ const Page = ({
       setIsFetching(false);
     }
   };
-  const [staffDetails, setStaffDetails] = useState<EmployeeLoanProfile | null>({
+  const [staffDetails, setStaffDetails] = useState<EmployeeLoanProfile>({
     firstName: "",
     lastName: "",
     staffEmail: "",
@@ -223,7 +223,7 @@ const Page = ({
           `${Endpoints.updateStaff}?adminId=1234566`,
           {
             ...staffDetails,
-            earnings: parseFloat(staffDetails.earnings.replace(/,/g, "")),
+            earnings: parseFloat(staffDetails?.earnings!.replace(/,/g, "")),
             updateType: "DELETE",
           }
         );
@@ -256,7 +256,7 @@ const Page = ({
     }
     const message = !staffDetails?.permanentBlacklist ? "exit" : "undo";
     const confirmSubmit = confirm(
-     `Are you sure you want to ${message} this staff? \n This action is irreversible`
+      `Are you sure you want to ${message} this staff? \n This action is irreversible`
     );
     if (confirmSubmit) {
       try {
