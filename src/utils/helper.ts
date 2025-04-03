@@ -18,3 +18,5 @@ export const timeFormatter = (date: Date) => {
       return parseFloat(amount?.replace(/,/g, "")).toFixed(2);
     }
   };
+
+ 

@@ -83,9 +83,16 @@ export const processWithAuth = async (
   method: string,
   path: string,
   data?: any,
-  callback?: (path: string, data: any, error?: any) => void
+  callback?: (path: string, data: any, error?: any) => void,
+  files?: any
 ): Promise<any> => {
   console.debug("processWithAuth -->", path, data);
+  if (files) {
+    data = convertToFormData(data, files);
+    console.log(data,files, "data from processWithAuth");
+    httpAuth!.defaults.headers["Content-Type"] = "multipart/form-data";
+    method = "post";
+  }
   let rt;
   try {
     if (method === "get") {
@@ -161,9 +168,15 @@ export const processNoAuth = async (
   method: string,
   path: string,
   data?: any,
-  callback?: any
+  callback?: (path: string, data: any, error?: any) => void,
+  files?: any
 ) => {
   console.debug("processNoAuth", path, data);
+  if (files) {
+    data = convertToFormData(data, files);
+    httpNoAuth!.defaults.headers["Content-Type"] = "multipart/form-data";
+    method = "post";
+  }
 
   let rt;
   try {
@@ -195,3 +208,54 @@ export const processNoAuth = async (
     }
   }
 };
+
+// export const convertToFormData = (data, files) => {
+//   const formData = new FormData();
+//   formData.append("data", JSON.stringify(data));
+
+//   if (Array.isArray(files)) {
+//     files.forEach((file, index) => {
+//       formData.append(`file${index}`, file);
+//     });
+//   } else if (typeof files === "object") {
+//     Object.keys(files).forEach((key) => {
+//       let keyFiles = Array.isArray(files[key]) ? files[key] : [files[key]];
+//       keyFiles.forEach((file, index) => {
+//         formData.append(`${key}${index}`, file);
+//       });
+//     });
+//   } else if (files.constructor.name === "File") {
+//     formData.append(`file`, files);
+//   }
+
+//   return formData;
+// };
+
+export const convertToFormData = (data, files) => {
+  const formData = new FormData();
+
+  // Append each key in data separately instead of as a JSON string
+  Object.keys(data).forEach((key) => {
+    formData.append(key, data[key]);
+  });
+
+  if (Array.isArray(files)) {
+    // If files is an array, append each file with the same key
+    files.forEach((file) => {
+      formData.append("file[]", file); // Use `file[]` for backend array support
+    });
+  } else if (files instanceof File) {
+    formData.append("file", files); // Single file upload
+  } else if (typeof files === "object") {
+    // If files is an object, loop through keys
+    Object.keys(files).forEach((key) => {
+      let keyFiles = Array.isArray(files[key]) ? files[key] : [files[key]];
+      keyFiles.forEach((file) => {
+        formData.append(`${key}[]`, file); // `key[]` ensures proper backend parsing
+      });
+    });
+  }
+
+  return formData;
+};
+

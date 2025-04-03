@@ -1,4 +1,5 @@
 "use client";
+import { getResponseErrorMessage } from "@/utils/data-utils";
 import { Endpoints } from "@/utils/endpoint";
 import { processWithAuth } from "@/utils/http";
 import React from "react";
@@ -18,12 +19,15 @@ const BulkUpload = () => {
   const [parsedData, setParsedData] = React.useState<any[]>([]);
   const [startNumber, setStartNumber] = React.useState(0);
   const [errMessage, setErrMessage] = React.useState("");
+  const [file, setFile] = React.useState<File | null>(null);
+  const [error, setError] = React.useState<any>(null);
 
   // Function to upload a single row of data to the server
   const handleFileUpload = (e: any) => {
     // return
     const file = e.target.files[0]; // Get the uploaded file
-
+    setFile(file);
+    return;
     if (file) {
       const reader = new FileReader();
 
@@ -57,10 +61,29 @@ const BulkUpload = () => {
     setParsedData(creditiumData); // Set extracted data
     console.log("Extracted Data:", creditiumData);
   };
-  console.log(parsedData, "parsedData -->");
 
   const handleUpload = async () => {
-    // return
+    try {
+      const res = await processWithAuth(
+        "post",
+        `${Endpoints.addNewStaff}/bulk/${companyCode}`,
+        {},
+        null,
+        file
+      );
+      console.log(res, "res -->");
+    } catch (error: any) {
+      console.log(error, "error -->");
+      if (error) {
+        setError(error.error);
+        toast.error(error.error, {
+          toastId: "uploadError",
+          position: "top-right",
+          pauseOnHover: true,
+        });
+      }
+    }
+    return;
     let stoppedNumber = 0;
     for (let i = startNumber; i < parsedData.length; i++) {
       try {
@@ -75,7 +98,7 @@ const BulkUpload = () => {
 
         const res = await processWithAuth(
           "post",
-          `${Endpoints.addNewStaff}/${companyCode}`,
+          `${Endpoints.addNewStaff}/bulk/${companyCode}`,
           {
             staffId: staff["EMPLOYEE_NUMBER"].toString(),
             firstName: staff["First Name"],
@@ -98,9 +121,10 @@ const BulkUpload = () => {
             toastId: "stoppedError",
             position: "top-right",
           });
-          if(error.statusCode ===400){
-
-            setErrMessage(`${error.error} at row ${i} with staff id ${parsedData[i]["EMPLOYEE_NUMBER"]}`);
+          if (error.statusCode === 400) {
+            setErrMessage(
+              `${error.error} at row ${i} with staff id ${parsedData[i]["EMPLOYEE_NUMBER"]}`
+            );
           }
           break;
         }
@@ -148,19 +172,7 @@ const BulkUpload = () => {
         id="upload sc file"
         onChange={handleFileUpload}
       />
-      <div className="">
-        <label htmlFor="startNumber">
-          Start Number (This is the row number to start from)
-        </label>
-        <input
-          type="number"
-          value={startNumber}
-          onChange={(e) => setStartNumber(e.target.valueAsNumber)}
-          name="startNumber"
-          id="startNumber"
-          className="border border-gray-300"
-        />
-      </div>
+
       <div className="flex gap-8">
         <button onClick={handleUpload} className="bg-green-500 py-2 px-2">
           Upload New Staff
@@ -205,6 +217,13 @@ const BulkUpload = () => {
             </tbody>
           </table>
         </div>
+        <p className="text-gray-500">
+          Note: The first row of the excel file should contain the headers
+          above.
+        </p>
+        {error && (
+          <p className="text-red-500">{JSON.stringify(error, null, 2)}</p>
+        )}
       </div>
     </div>
   );

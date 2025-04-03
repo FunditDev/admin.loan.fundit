@@ -1,4 +1,6 @@
+import { getResponseErrorMessage } from "@/utils/data-utils";
 import { processNoAuth } from "@/utils/http";
+import axios, { AxiosError } from "axios";
 import next from "next";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
@@ -37,7 +39,6 @@ export async function GET(
         headers: {
           "Content-Type": "application/json",
           Authorization: token || "",
-          
         },
       }
     );
@@ -70,36 +71,43 @@ export async function POST(
 ) {
   const reqUrl = new URL(request.url);
   const pathname = reqUrl.pathname;
+  const contentType = request.headers.get("Content-Type");
   const search = reqUrl.search;
-  const body = await request.json();
+  const isMultipart = contentType?.includes("multipart/form-data");
+  const body = isMultipart
+    ? await request.formData()
+    : contentType?.includes("application/json")
+    ? await request.json()
+    : null;
+  console.log("body -->", body);
   const token = request.headers.get("Authorization");
   console.log("token -->", token);
   const constructedPath = pathname.replace("/api/", "");
   const withSearch = `${constructedPath}${search}`;
-
+  console.log("contentType -->", contentType);
   try {
-    const res = await fetch(
+    const res = await axios.post(
       `${url}/${withSearch ? withSearch : constructedPath}`,
+      isMultipart ? body : JSON.stringify(body),
       {
-        method: "POST",
-        body: JSON.stringify(body),
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": contentType || "application/json",
           Authorization: token || "",
         },
-        credentials: "same-origin",
+        withCredentials: true,
       }
     );
-    const data = await res.json();
+    const data = await res.data;
     console.log("data -->", data);
     return new Response(JSON.stringify(data), {
       status: data.status || data.statusCode,
     });
   } catch (e: any) {
-    console.log("error here -->", e);
+    const error = getResponseErrorMessage(e);
+    // console.log("error here -->", e);
 
-    return new Response(JSON.stringify({ error: e.message }), {
-      status: e.statusCode || 500,
+    return new Response(JSON.stringify({ ...e.response.data }), {
+      status: e.response.data.statusCode || 500,
     });
   }
 }

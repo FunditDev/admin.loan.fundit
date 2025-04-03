@@ -13,7 +13,7 @@ const SmartcashNav = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { data, isLoading, error } = usePendingUpdate();
+  // const { data, isLoading, error } = usePendingUpdate();
   return (
     <nav className="flex flex-1 flex-col">
       <ul role="list" className="flex flex-1 flex-col gap-y-3">
@@ -28,11 +28,7 @@ const SmartcashNav = () => {
                       ? "bg-gray-800 text-white"
                       : "text-gray-400 hover:text-white hover:bg-gray-800",
                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                  )} ${
-                    data && data.length > 0
-                      ? "!bg-red-500 text-white animate-pulse"
-                      : "text-gray-400"
-                  } `}
+                  )} `}
                 >
                   <div className="flex space-x-4 items-center">
                     <item.icon
@@ -41,11 +37,7 @@ const SmartcashNav = () => {
                     />
                     <span>{item.name}</span>
                   </div>
-                  {data && data.length > 0 && (
-                    <span className="rounded-full bg-white text-red-500 px-2">
-                      {data && data.length > 0 && data.length}
-                    </span>
-                  )}
+                  
                 </Link>
               </li>
             );
