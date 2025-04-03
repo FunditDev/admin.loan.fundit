@@ -16,7 +16,7 @@ import { Endpoints } from "@/utils/endpoint";
 import { processWithAuth } from "@/utils/http";
 import { toast } from "react-toastify";
 import { Span } from "next/dist/trace";
-import Spinner from "../icons/Spinner";
+import Spinner, { SpinnerTwo } from "../icons/Spinner";
 type Props = {
   staffs: Stafftype[];
 };
@@ -222,7 +222,7 @@ const exportToExcel = (staffs: Stafftype[]) => {
 export function ImportStaffsModal({ onClose }: { onClose: () => void }) {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     setFile(file);
@@ -257,7 +257,7 @@ export function ImportStaffsModal({ onClose }: { onClose: () => void }) {
         "post",
         `${Endpoints.addNewStaff}/bulk/${companyCode}`,
         {},
-        null,
+        undefined,
         file
       );
       console.log(res, "res -->");
@@ -270,6 +270,7 @@ export function ImportStaffsModal({ onClose }: { onClose: () => void }) {
     } catch (error: any) {
       console.log(error, "error -->");
       if (error) {
+        setIsLoading(false);
         setError(error.error);
         toast.error(error.error, {
           toastId: "uploadError",
@@ -349,7 +350,7 @@ export function ImportStaffsModal({ onClose }: { onClose: () => void }) {
             className=" h-8 min-w-[80px] flex items-center justify-center cursor-pointer rounded-md px-3 text-xs  text-blue-200 bg-blue-600 hover:bg-blue-900 disabled:cursor-not-allowed"
           >
             {isLoading ? (
-              <Spinner className="h-5 w-5 animate-spin text-white " />
+              <SpinnerTwo className="h-4 w-4 animate-spin text-white !mx-auto " />
             ) : (
               <span>Upload</span>
             )}

@@ -89,7 +89,7 @@ export const processWithAuth = async (
   console.debug("processWithAuth -->", path, data);
   if (files) {
     data = convertToFormData(data, files);
-    console.log(data,files, "data from processWithAuth");
+    console.log(data, files, "data from processWithAuth");
     httpAuth!.defaults.headers["Content-Type"] = "multipart/form-data";
     method = "post";
   }
@@ -231,7 +231,7 @@ export const processNoAuth = async (
 //   return formData;
 // };
 
-export const convertToFormData = (data, files) => {
+export const convertToFormData = (data: any, files: any) => {
   const formData = new FormData();
 
   // Append each key in data separately instead of as a JSON string
@@ -258,4 +258,3 @@ export const convertToFormData = (data, files) => {
 
   return formData;
 };
-

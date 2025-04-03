@@ -68,7 +68,7 @@ const BulkUpload = () => {
         "post",
         `${Endpoints.addNewStaff}/bulk/${companyCode}`,
         {},
-        null,
+        undefined,
         file
       );
       console.log(res, "res -->");
