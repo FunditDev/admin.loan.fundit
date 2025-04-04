@@ -104,7 +104,7 @@ export async function POST(
     });
   } catch (e: any) {
     const error = getResponseErrorMessage(e);
-    // console.log("error here -->", e);
+     console.log("error here -->", error);
 
     return new Response(JSON.stringify({ ...e.response.data }), {
       status: e.response.data.statusCode || 500,

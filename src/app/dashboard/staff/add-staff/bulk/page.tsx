@@ -27,39 +27,6 @@ const BulkUpload = () => {
     // return
     const file = e.target.files[0]; // Get the uploaded file
     setFile(file);
-    return;
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = function (event: any) {
-        const data = new Uint8Array(event?.target.result as any); // Read file data as an array buffer
-        const workbook = XLSX.read(data); // Parse the Excel file
-
-        // Assuming you're reading the first sheet:
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-
-        // Convert sheet to JSON
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
-        setParsedData(jsonData);
-        // extractCreditiumData(jsonData); // Set the parsed data to state
-      };
-
-      reader.readAsArrayBuffer(file); // Read the file as an array buffer
-    }
-  };
-  const extractCreditiumData = (jsonData: any[]) => {
-    // Filter out the rows containing the "Creditium" header and extract relevant data
-    console.log(jsonData, "jsonData -->");
-    const creditiumData = jsonData
-      .filter((row) => row["Creditium"]) // Adjust to match the header name exactly
-      .map((row) => ({
-        staffId: row["staffId"], // Replace with actual column name from your Excel
-        accountNumber: row["account numbers"], // Replace with actual column name
-      }));
-
-    setParsedData(creditiumData); // Set extracted data
-    console.log("Extracted Data:", creditiumData);
   };
 
   const handleUpload = async () => {
@@ -81,53 +48,6 @@ const BulkUpload = () => {
           position: "top-right",
           pauseOnHover: true,
         });
-      }
-    }
-    return;
-    let stoppedNumber = 0;
-    for (let i = startNumber; i < parsedData.length; i++) {
-      try {
-        //   if (i > 2) {
-        //     return;
-        //   }
-        const staff = parsedData[i];
-        // return
-        if (!staff) {
-          return;
-        }
-
-        const res = await processWithAuth(
-          "post",
-          `${Endpoints.addNewStaff}/bulk/${companyCode}`,
-          {
-            staffId: staff["EMPLOYEE_NUMBER"].toString(),
-            firstName: staff["First Name"],
-            lastName: staff["Last Name"],
-            staffEmail: staff["EMAIL_ADDRESS"],
-            earnings: staff["Monthly Payment"],
-            bvn: staff["BVN"].toString(),
-            bankAccount: staff["Account Number"].toString(),
-            legalEmployer: staff["LEGAL_EMPLOYER_NAME"],
-            bankName: "Smartcash Wallet",
-          }
-        );
-        console.log(res, "res -->", i);
-      } catch (error: any) {
-        console.log(error, "error -->");
-        if (error) {
-          stoppedNumber = i;
-          console.log(`stopped at ${stoppedNumber}`);
-          toast.error("Stopped at " + stoppedNumber, {
-            toastId: "stoppedError",
-            position: "top-right",
-          });
-          if (error.statusCode === 400) {
-            setErrMessage(
-              `${error.error} at row ${i} with staff id ${parsedData[i]["EMPLOYEE_NUMBER"]}`
-            );
-          }
-          break;
-        }
       }
     }
   };
