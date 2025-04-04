@@ -260,8 +260,8 @@ export function ImportStaffsModal({ onClose }: { onClose: () => void }) {
         undefined,
         file
       );
-      console.log(res, "res -->");
-      toast.success("Staffs imported successfully", {
+      console.log(res.data.message, "res -->");
+      toast.success(res.data.message, {
         toastId: "uploadSuccess",
         position: "top-right",
         pauseOnHover: true,

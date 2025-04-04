@@ -78,13 +78,11 @@ export async function POST(
     ? await request.formData()
     : contentType?.includes("application/json")
     ? await request.json()
-    : null;
-  console.log("body -->", body);
+    : request.json();
+  // console.log("body -->", body);
   const token = request.headers.get("Authorization");
-  console.log("token -->", token);
   const constructedPath = pathname.replace("/api/", "");
   const withSearch = `${constructedPath}${search}`;
-  console.log("contentType -->", contentType);
   try {
     const res = await axios.post(
       `${url}/${withSearch ? withSearch : constructedPath}`,
@@ -98,13 +96,13 @@ export async function POST(
       }
     );
     const data = await res.data;
-    console.log("data -->", data);
+    // console.log("data -->", data);
     return new Response(JSON.stringify(data), {
       status: data.status || data.statusCode,
     });
   } catch (e: any) {
     const error = getResponseErrorMessage(e);
-     console.log("error here -->", error);
+    //  console.log("error here -->", error);
 
     return new Response(JSON.stringify({ ...e.response.data }), {
       status: e.response.data.statusCode || 500,
@@ -171,7 +169,7 @@ export async function DELETE(
     }
   );
   if (getData.status === 401 && getData.statusText === "Unauthorized") {
-    redirect("/login");
+    NextResponse.redirect("/login");
   }
   const data = await getData.json();
 
@@ -180,4 +178,4 @@ export async function DELETE(
 export async function PATCH() {}
 
 export const dynamic = "force-dynamic";
-export const runtime = 'edge'
+// export const runtime = 'edge'
