@@ -327,12 +327,12 @@ export function ImportStaffsModal({ onClose }: { onClose: () => void }) {
               Download this sample CSV file to see the required format. Ensure
               all fields are filled for a successful import.
             </p>
-            <button
-              onClick={handleFileDownload}
+            <a
+              href="https://files.fundit.com.ng/tenant/demo-global.xlsx"
               className="rounded-full border-[#757575] border h-10 w-10 flex items-center justify-center"
             >
               <ArrowDownTrayIcon className="text-[#757575] size-4" />
-            </button>
+            </a>
           </div>
         </div>
 

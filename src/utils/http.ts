@@ -238,7 +238,7 @@ export const convertToFormData = (data: any, files: any) => {
   Object.keys(data).forEach((key) => {
     formData.append(key, data[key]);
   });
-
+    
   if (Array.isArray(files)) {
     // If files is an array, append each file with the same key
     files.forEach((file) => {
