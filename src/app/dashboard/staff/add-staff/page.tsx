@@ -20,7 +20,7 @@ type AddStaffType = {
   bankName: string;
   bvn: string;
   legalEmployer: string;
-  
+  nin: string;
 };
 const companyCode = process.env.NEXT_PUBLIC_COMPANY_CODE;
 const AddStaffPage = () => {
@@ -38,11 +38,15 @@ const AddStaffPage = () => {
     );
     if (confirmSubmit) {
       try {
-        const res = await processWithAuth("post", `${Endpoints.addNewStaff}/${companyCode}`, {
-          ...data,
-          earnings: parseFloat(data.earnings.replace(/,/g, "")),
-          bankAccount: data.bankAccount,
-        });
+        const res = await processWithAuth(
+          "post",
+          `${Endpoints.addNewStaff}/${companyCode}`,
+          {
+            ...data,
+            earnings: parseFloat(data.earnings.replace(/,/g, "")),
+            bankAccount: data.bankAccount,
+          }
+        );
         if (res) {
           toast.success("Staff Added Successfully", {
             position: "top-right",
@@ -51,7 +55,6 @@ const AddStaffPage = () => {
           router.push("/dashboard/staff");
         }
       } catch (e: any) {
-        console.log(e, "hdhdjd");
         if (Array.isArray(e.error)) {
           // e.error.forEach((err) => {
           //   toast.error(err);
@@ -140,6 +143,13 @@ const AddStaffPage = () => {
                 register={register}
                 placeholder="Enter BVN"
                 label="BVN"
+              />
+              <CustomInput
+                name="nin"
+                type="text"
+                register={register}
+                placeholder="Enter NIN"
+                label="NIN"
               />
               <CustomInput
                 name="legalEmployer"
